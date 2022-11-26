@@ -1,5 +1,21 @@
 .App {
   /* text-align: center; */
+
+  nav{
+    width: 100%;
+    background: #24292F;
+    padding: 20px 0;
+    span{
+      display: inline-block;
+      width:70px;
+      text-align: center;
+      a{
+        color: #ffffff;
+      }
+    }
+
+
+  }
 }
 
 .App-logo {

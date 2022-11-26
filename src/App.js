@@ -1,18 +1,18 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Nav from "./layout/nav";
 import Login from "./pages/Login";
-import "./App.css";
+import Join from "./pages/Join";
+import "./App.scss";
 
 function App() {
   return (
-    <div className='App'>
-      <nav>
-        <Link to='/'>Login</Link>
-      </nav>
+    <div className="App">
+      <Nav />
 
       <Routes>
-        <Route path='/' element={<Login />} />
-        {/* <Route path='/about' element={<About />} /> */}
+        <Route path="/" element={<Login />} />
+        <Route path="/Join" element={<Join />} />
       </Routes>
     </div>
   );

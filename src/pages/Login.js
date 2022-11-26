@@ -28,7 +28,7 @@ const Login = () => {
     };
 
     axios
-      .post("http://loacalhost:8080/api/login", loginParams)
+      .post("http://localhost:8080/api/login", loginParams)
       .then((res) => console.log("test!" + res))
       .catch((err) => console.log(err));
   };

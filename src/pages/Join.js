@@ -31,8 +31,9 @@ const Join = () => {
     };
 
     axios.defaults.withCredentials = true;
+
     axios
-      .post("http://loacalhost:8080/api/members/add", joinParams)
+      .post("http://localhost:8080/api/members/add", joinParams)
       .then((res) => console.log("test!" + res))
       .catch((err) => console.log(err));
   };

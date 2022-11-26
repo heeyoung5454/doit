@@ -8,6 +8,12 @@
 # testing
 /coverage
 
+### macOS template
+*.DS_Store
+
+# project files
+.idea
+
 # production
 /build
 

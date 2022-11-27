@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../assets/login.scss";
 import axios from "axios";
+
+import imgLogin from "../assets/images/icon/user.png";
 
 const Login = () => {
   const [inputs, setInputs] = useState({
@@ -35,8 +38,9 @@ const Login = () => {
 
   return (
     <div className="login">
-      <h1> 로그인</h1>
       <div className="login-wrap">
+        <img src={imgLogin} alt="login" />
+        <h1>로그인</h1>
         <div className="input-box">
           <input
             id="userId"
@@ -62,6 +66,11 @@ const Login = () => {
         </div>
 
         <button onClick={login}>로그인</button>
+
+        <div className="findAccount">아이디/비밀번호 찾기</div>
+        <div className="join">
+          <Link to="/Join">회원가입</Link>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../assets/login.scss";
 import axios from "axios";
+import "../assets/login.scss";
+import Modal from "./component/modal";
 
 import imgLogin from "../assets/images/icon/user.png";
 
@@ -25,6 +26,18 @@ const Login = () => {
 
   //로그인
   const login = () => {
+    if (!userId) {
+      openModal();
+      changeModalMsg("아이디를 입력해주세요");
+      return;
+    }
+
+    if (!password) {
+      openModal();
+      changeModalMsg("비밀번호를 입력해주세요");
+      return;
+    }
+
     let loginParams = {
       nickname: userId,
       password: password,
@@ -32,12 +45,34 @@ const Login = () => {
 
     axios
       .post("http://localhost:8080/api/login", loginParams)
-      .then((res) => console.log("test!" + res))
+      .then((res) => {
+        if (res.data.result === "err") {
+          openModal();
+          changeModalMsg("로그인에 실패했습니다");
+        }
+      })
       .catch((err) => console.log(err));
+  };
+
+  // 모달창 제어
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const changeModalMsg = (msg) => {
+    setModalMsg(msg);
   };
 
   return (
     <div className="login">
+      <Modal msg={modalMsg} open={modalOpen} close={closeModal} />
       <div className="login-wrap">
         <img src={imgLogin} alt="login" />
         <h1>로그인</h1>

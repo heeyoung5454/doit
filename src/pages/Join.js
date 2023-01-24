@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../assets/join.scss";
+import Modal from "./component/modal";
 
 const Join = () => {
   const [inputs, setInputs] = useState({
@@ -24,6 +25,18 @@ const Join = () => {
 
   //회원가입
   const join = () => {
+    if (!nickname) {
+      openModal();
+      changeModalMsg("아이디를 입력해주세요");
+      return;
+    }
+
+    if (!password) {
+      openModal();
+      changeModalMsg("비밀번호를 입력해주세요");
+      return;
+    }
+
     let joinParams = {
       nickname: nickname,
       password: password,
@@ -34,12 +47,38 @@ const Join = () => {
 
     axios
       .post("http://localhost:8080/api/members/add", joinParams)
-      .then((res) => console.log("test!" + res))
+      .then((res) => {
+        console.log(JSON.stringify(res.data.result));
+        if (res.data.result === "suc") {
+          openModal();
+          changeModalMsg("회원가입에 성공했습니다.");
+        } else if (res.data.result === "err") {
+          openModal();
+          changeModalMsg("회원가입에 실패하였습니다");
+        }
+      })
       .catch((err) => console.log(err));
+  };
+
+  // 모달창 제어
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false); // 모달창 닫기
+  };
+
+  const changeModalMsg = (msg) => {
+    setModalMsg(msg);
   };
 
   return (
     <div className="join">
+      <Modal msg={modalMsg} open={modalOpen} close={closeModal} />
       <h1> 회원가입</h1>
       <div className="join-wrap">
         <div className="input-box">

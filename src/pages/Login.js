@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../assets/login.scss";
 import Modal from "./component/modal";
@@ -46,7 +46,11 @@ const Login = () => {
     axios
       .post("http://localhost:8080/api/login", loginParams)
       .then((res) => {
-        if (res.data.result === "err") {
+        if (res.data.result === "suc") {
+          openModal();
+          changeModalMsg("로그인에 성공했습니다.");
+          changeMoveUrl("/main");
+        } else if (res.data.result === "err") {
           openModal();
           changeModalMsg("로그인에 실패했습니다");
         }
@@ -54,9 +58,12 @@ const Login = () => {
       .catch((err) => console.log(err));
   };
 
+  // 로그인 성공시 페이지 이동
+  const movePage = useNavigate();
+
   // 모달창 제어
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalMsg, setModalMsg] = useState("");
+  const [modalOpen, setModalOpen] = useState(false); // 팝업 호출
+  const [modalMsg, setModalMsg] = useState(""); // 팝업 메세지
 
   const openModal = () => {
     setModalOpen(true);
@@ -64,6 +71,10 @@ const Login = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const changeMoveUrl = (pageUrl) => {
+    movePage(pageUrl); // 페이지 이동
   };
 
   const changeModalMsg = (msg) => {

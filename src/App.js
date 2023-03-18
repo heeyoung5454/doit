@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Join from "./pages/Join";
+import Main from "./pages/Main";
 import "./App.scss";
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Join" element={<Join />} />
+        <Route path="/join" element={<Join />} />
+        <Route path="/main" element={<Main />} />
       </Routes>
     </div>
   );

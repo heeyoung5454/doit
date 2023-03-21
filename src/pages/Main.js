@@ -18,19 +18,17 @@ import "../assets/main.scss";
 const CalHeader = ({ nowMonth, prevMonth, nextMonth }) => {
   return (
     <div className="header">
-      <div className="col col-start">
-        <span className="text">
-          <span className="month">
-            {format(nowMonth, "M")}
-            <span className="eng">
-              {nowMonth.toLocaleString("en-US", { month: "long" })}
-            </span>
+      <div className="title">
+        <span className="month">
+          {format(nowMonth, "M")}
+          <span className="eng">
+            {nowMonth.toLocaleString("en-US", { month: "long" })}
           </span>
-
-          <span className="year">{format(nowMonth, "yyyy")}</span>
         </span>
+
+        <span className="year">{format(nowMonth, "yyyy")}</span>
       </div>
-      <div className="col col-end">
+      <div className="arrow">
         <Icon icon="bi:arrow-left-circle-fill" onClick={prevMonth} />
         <Icon icon="bi:arrow-right-circle-fill" onClick={nextMonth} />
       </div>
@@ -44,7 +42,7 @@ const CalDays = () => {
 
   for (let i = 0; i < 7; i++) {
     days.push(
-      <div className="col" key={i}>
+      <div className="week" key={i}>
         {date[i]}
       </div>
     );
@@ -70,7 +68,7 @@ const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
       const cloneDay = day;
       days.push(
         <div
-          className={`col cell ${
+          className={`cell ${
             !isSameMonth(day, monthStart)
               ? "disabled"
               : isSameDay(day, selectDate)

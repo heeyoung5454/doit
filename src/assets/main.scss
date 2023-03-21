@@ -1,14 +1,28 @@
 .calendar {
+  max-width: 1000px;
+  margin: 0 auto;
   .header {
-    .text {
+    display: flex;
+    justify-content: space-between;
+    .title {
       .month {
         font-size: 50px;
         margin-left: 10px;
-
         .eng {
           font-size: 25px;
           margin: 0 5px;
         }
+      }
+      .year {
+        font-size: 15px;
+      }
+    }
+
+    .arrow {
+      padding-top: 20px;
+      svg {
+        margin: 0 5px;
+        cursor: pointer;
       }
     }
   }
@@ -16,9 +30,9 @@
   .row {
     display: flex;
     &.day {
-      .col {
+      .week {
         background-color: #333333;
-        width: 100px;
+        width: 142px;
         text-align: center;
         height: 40px;
         box-sizing: border-box;
@@ -35,8 +49,8 @@
     }
 
     .cell {
-      width: 100px;
-      height: 100px;
+      width: 142px;
+      height: 130px;
       box-sizing: border-box;
       padding: 10px;
       border-right: 1px solid #cccccc;
@@ -48,6 +62,7 @@
       &:first-child {
         color: red;
         font-weight: 900;
+        border-left: 1px solid #cccccc;
       }
       &:last-child {
         color: royalblue;

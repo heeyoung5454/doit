@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-//import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import {
   format,
@@ -10,7 +10,7 @@ import {
   startOfWeek,
   endOfWeek,
 } from "date-fns";
-import { isSameMonth, isSameDay, addDays, parse } from "date-fns";
+import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 
 // reference site https://sennieworld.tistory.com/74
@@ -51,7 +51,7 @@ const CalDays = () => {
   return <div className="day row">{days}</div>;
 };
 
-const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
+const CalCell = ({ nowMonth, selectDate, onDateClick, choiceList }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -66,6 +66,7 @@ const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
     for (let j = 0; j < 7; j++) {
       formattedDate = format(day, "d");
       const cloneDay = day;
+
       days.push(
         <div
           className={`cell ${
@@ -78,7 +79,7 @@ const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
               : "valid"
           }`}
           key={day}
-          onClick={() => onDateClick(parse(cloneDay))}
+          onClick={() => onDateClick(cloneDay)}
         >
           <span
             className={
@@ -89,8 +90,10 @@ const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
           </span>
         </div>
       );
+
       day = addDays(day, 1);
     }
+
     rows.push(
       <div className="row" key={day}>
         {days}
@@ -98,14 +101,15 @@ const CalCell = ({ nowMonth, selectDate, onDateClick }) => {
     );
     days = [];
   }
-  return <div className="body">{rows}</div>;
+  return <div className="body">{rows} </div>;
 };
 
 const Main = () => {
-  // const today = new Date();
-  //
   const [nowMonth, setNowMonth] = useState(new Date());
   const [selectDate, setSelectDate] = useState(new Date());
+
+  const [choiceDayList, setChoiceDayList] = useState([]);
+  const [choiceFullList, setChoiceFullList] = useState([]);
 
   const prevMonth = () => {
     setNowMonth(subMonths(nowMonth, 1));
@@ -116,7 +120,57 @@ const Main = () => {
   };
 
   const onDateClick = (day) => {
+    let convertDay = new Date(day);
+
     setSelectDate(day);
+
+    let month = convertDay.getMonth() + 1;
+    let date = convertDay.getDate();
+
+    if (month < 10) {
+      month = "0" + month;
+    }
+
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let fullDate =
+      convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
+
+    // 현재 있는 choiceFullList가 1개이하라면 그냥 푸시
+    if (choiceFullList.length <= 2) {
+      if (choiceFullList.length === 0) {
+        // 시작일과 종료일 모두 미셋팅 -> 무조건 푸시
+        setChoiceFullList([...choiceFullList, fullDate]);
+      } else if (choiceFullList.length === 1) {
+        // 한개 날짜가 지정되어있을 경우, 비교해서 넣기
+        if (new Date(fullDate) > new Date(choiceFullList[0])) {
+          setChoiceFullList([...choiceFullList, fullDate]);
+        } else {
+          setChoiceFullList([fullDate, ...choiceFullList]);
+        }
+      } else {
+        // 시작일과 종료일 셋팅 완료 됬을 경우 선택값 초기화 후 시작일로 무조건 셋팅
+        setChoiceFullList([]);
+        choiceFullList[0] = fullDate;
+      }
+    }
+  };
+
+  const pageMove = useNavigate();
+
+  const moveDay = () => {
+    if (choiceFullList.length < 2 || choiceFullList == null) {
+      alert("날짜를 선택해주세요");
+      return;
+    }
+
+    pageMove("/day", {
+      state: {
+        choiceDate: choiceFullList,
+      },
+    });
   };
 
   return (
@@ -131,7 +185,15 @@ const Main = () => {
         nowMonth={nowMonth}
         selectDate={selectDate}
         onDateClick={onDateClick}
+        choiceList={choiceDayList}
       />
+      <div className="set-date">
+        <div>시작일 : {choiceFullList[0]}</div>
+        <div>종료일 : {choiceFullList[1]}</div>
+      </div>
+      <button className="next" onClick={moveDay}>
+        등록하기
+      </button>
     </div>
   );
 };

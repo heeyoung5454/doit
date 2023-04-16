@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/main.scss";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -14,6 +14,7 @@ const Main = () => {
   let startDt = new Date(choiceDate[0]);
   let endDt = new Date(choiceDate[1]);
   let dayGroup = [];
+  let idx = 0; //  seqNo 지정
 
   while (startDt <= endDt) {
     let start = startDt;
@@ -34,19 +35,25 @@ const Main = () => {
     let fullDate =
       start.getFullYear() + "-" + month.toString() + "-" + date.toString();
 
-    dayGroup.push(fullDate);
+    dayGroup.push({
+      seqNo: idx,
+      date: fullDate,
+      taskList: [{ title: "", content: "", priority: "" }],
+    });
+    idx++;
   }
 
   // 일정등록
-  const planInsert = () => {
+  const planInsert = (event) => {
+    console.log(event);
+    console.log(dayTask[event.i]);
+
     let insertParams = {
       startDate: location.state.choiceDate[0],
       endDate: location.state.choiceDate[1],
     };
 
-    if (true) {
-      return;
-    }
+    let mainId;
 
     axios
       .post("/api/main-schedule", insertParams)
@@ -54,16 +61,23 @@ const Main = () => {
         console.log(axios.defaults.headers.common, "test");
         console.log(JSON.stringify(res.data.result));
         if (res.data.result === "suc") {
+          mainId = res.data.mainId;
           alert("성공");
         } else if (res.data.result === "err") {
           alert("실패");
+          return;
         }
       })
       .catch((err) => console.log("catch" + err));
 
-    let taskParams = {};
+    let dayTaskParams = {
+      mainScheduleId: mainId,
+      date: dayTask[event.i].date,
+      taskScheduleFormList: dayTask[event.i].taskList,
+    };
+
     axios
-      .post("/api/daily-schedule/task", taskParams)
+      .post("/api/daily-schedule/task", dayTaskParams)
       .then((res) => {
         console.log(axios.defaults.headers.common, "test");
         console.log(JSON.stringify(res.data.result));
@@ -76,31 +90,62 @@ const Main = () => {
       .catch((err) => console.log("catch" + err));
   };
 
+  // 일별 task
+  const [dayTask, setDayTask] = useState(dayGroup);
+
+  const inputTask = (event) => {
+    const index = event.i;
+    const value = event.e.target.value;
+
+    setDayTask(
+      dayTask.map((item) => {
+        if (item.seqNo === index) {
+          let temp = [{ title: value, content: "test", priority: "0" }];
+
+          return {
+            ...item,
+            taskList: temp,
+          };
+        } else {
+          return item;
+        }
+      })
+    );
+  };
+
   const printDayList = () => {
-    let dayInput = [];
-    let k = [];
-    for (let i = 0; i < dayGroup.length; i++) {
-      dayInput.push(
-        <div key={i} class="day">
-          <label htmlFor={"dayInput-" + i}>{dayGroup[i]}</label>
-          <input id={"dayInput-" + i} type="text" value={k[i]} />
+    let dayPrint = [];
+
+    for (let i = 0; i < dayTask.length; i++) {
+      dayPrint.push(
+        <div key={i} className="day">
+          <label htmlFor={"dayInput-" + i}>{dayTask[i].date}</label>
+          <input
+            id={"dayInput-" + i}
+            type="text"
+            value={dayTask[i].taskList[0].title || ""}
+            onChange={(e) => inputTask({ e, i })}
+          />
+
+          <button className="insert" onClick={(e) => planInsert({ i })}>
+            등록
+          </button>
         </div>
       );
     }
 
-    console.log(k, "000");
-    return dayInput;
+    return dayPrint;
   };
 
   return (
     <div className="dayInput">
       <div className="inner">
+        {JSON.stringify(dayTask)}
         <div className="title">일별 등록</div>
-
         <div className="dayList">{printDayList()}</div>
-        <button className="insert" onClick={planInsert}>
-          등록
-        </button>
+        {/*<button className="insert" onClick={planInsert}>*/}
+        {/*  등록*/}
+        {/*</button>*/}
       </div>
     </div>
   );

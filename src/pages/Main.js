@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import {
@@ -12,6 +12,7 @@ import {
 } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
+import axios from "axios";
 
 // reference site https://sennieworld.tistory.com/74
 
@@ -51,7 +52,25 @@ const CalDays = () => {
   return <div className="day row">{days}</div>;
 };
 
-const CalCell = ({ nowMonth, selectDate, onDateClick, choiceList }) => {
+const getMainScheduleId = (allTasked, nowDate) => {
+  for (let i = 0; i < allTasked.length; i++) {
+    let stDate = new Date(
+      new Date(allTasked[i].startDate).setHours(0, 0, 0, 0)
+    );
+    let endDate = new Date(new Date(allTasked[i].endDate).setHours(0, 0, 0, 0));
+
+    if (
+      nowDate.getTime() >= stDate.getTime() &&
+      nowDate.getTime() <= endDate.getTime()
+    ) {
+      return allTasked[i].mainScheduleId;
+    }
+  }
+
+  return false;
+};
+
+const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -83,11 +102,16 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, choiceList }) => {
         >
           <span
             className={
-              format(nowMonth, "M") !== format(day, "M") ? "text not-vaild" : ""
+              format(nowMonth, "M") !== format(day, "M")
+                ? "not-vaild daily"
+                : "daily"
             }
           >
             {formattedDate}
           </span>
+          <span
+            className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""}
+          ></span>
         </div>
       );
 
@@ -106,9 +130,32 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, choiceList }) => {
 
 const Main = () => {
   const [nowMonth, setNowMonth] = useState(new Date());
-  const [selectDate, setSelectDate] = useState(new Date());
+  const [mainTask, setMainTask] = useState([]);
 
-  const [choiceDayList, setChoiceDayList] = useState([]);
+  // 메인 스케줄 조회 함수
+  const getMainTask = (data) => {
+    setMainTask(data);
+  };
+
+  // useEffect -> 화면 렌더링 되기 전 실행
+  useEffect(() => {
+    let paramsYear = format(nowMonth, "yyyy");
+    let paramsMonth = format(nowMonth, "MM");
+
+    // 메인 스케줄 조회
+    axios
+      .get(`/api/main-schedule/${paramsYear}/${paramsMonth}`)
+      .then((res) => {
+        if (res.data.result === "suc") {
+          getMainTask(res.data.data);
+        } else if (res.data.result === "err") {
+          alert("스케줄 조회에 실패하셨습니다.");
+        }
+      })
+      .catch((err) => console.log("catch" + err));
+  }, [nowMonth]);
+
+  const [selectDate, setSelectDate] = useState(new Date());
   const [choiceFullList, setChoiceFullList] = useState([]);
 
   const prevMonth = () => {
@@ -185,7 +232,7 @@ const Main = () => {
         nowMonth={nowMonth}
         selectDate={selectDate}
         onDateClick={onDateClick}
-        choiceList={choiceDayList}
+        allTasked={mainTask}
       />
       <div className="set-date">
         <div>시작일 : {choiceFullList[0]}</div>

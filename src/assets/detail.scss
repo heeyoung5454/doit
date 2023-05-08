@@ -1,0 +1,22 @@
+.task-detail {
+  background-color: #61dafb;
+  min-height: 100vh;
+
+  h2 {
+    text-align: center;
+    font-size: 25px;
+  }
+
+  .content {
+    padding: 20px 50px;
+
+    .date {
+      margin-bottom: 5px;
+    }
+    .task-schedule {
+      display: flex;
+      margin-bottom: 20px;
+      justify-content: space-between;
+    }
+  }
+}

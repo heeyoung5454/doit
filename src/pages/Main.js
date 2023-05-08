@@ -70,7 +70,13 @@ const getMainScheduleId = (allTasked, nowDate) => {
   return false;
 };
 
-const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked }) => {
+const CalCell = ({
+  nowMonth,
+  selectDate,
+  onDateClick,
+  allTasked,
+  detailClick,
+}) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -84,6 +90,7 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked }) => {
   while (day <= endDate) {
     for (let j = 0; j < 7; j++) {
       formattedDate = format(day, "d");
+      // day를 직접적으로 사용하면 무한루프 돌기 때문에 지역변수로 선언하여 사용
       const cloneDay = day;
 
       days.push(
@@ -111,6 +118,7 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked }) => {
           </span>
           <span
             className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""}
+            onClick={() => detailClick(allTasked, cloneDay)}
           ></span>
         </div>
       );
@@ -207,17 +215,27 @@ const Main = () => {
 
   const pageMove = useNavigate();
 
-  const moveDay = () => {
-    if (choiceFullList.length < 2 || choiceFullList == null) {
-      alert("날짜를 선택해주세요");
-      return;
-    }
+  const moveUrl = (type, allTask, date) => {
+    if (type === "add") {
+      if (choiceFullList.length < 2 || choiceFullList == null) {
+        alert("날짜를 선택해주세요");
+        return;
+      }
 
-    pageMove("/day", {
-      state: {
-        choiceDate: choiceFullList,
-      },
-    });
+      pageMove("/day", {
+        state: {
+          choiceDate: choiceFullList,
+        },
+      });
+    } else if (type === "detail") {
+      let mainId = getMainScheduleId(allTask, date);
+
+      pageMove("/detail", {
+        state: {
+          mainScheduleId: mainId,
+        },
+      });
+    }
   };
 
   return (
@@ -233,12 +251,13 @@ const Main = () => {
         selectDate={selectDate}
         onDateClick={onDateClick}
         allTasked={mainTask}
+        detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
       />
       <div className="set-date">
         <div>시작일 : {choiceFullList[0]}</div>
         <div>종료일 : {choiceFullList[1]}</div>
       </div>
-      <button className="next" onClick={moveDay}>
+      <button className="next" onClick={() => moveUrl("add")}>
         등록하기
       </button>
     </div>

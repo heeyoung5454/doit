@@ -222,11 +222,33 @@ const Main = () => {
         return;
       }
 
-      pageMove("/day", {
-        state: {
-          choiceDate: choiceFullList,
-        },
-      });
+      console.log(choiceFullList, "tttt");
+
+      let insertParams = {
+        startDate: choiceFullList[0],
+        endDate: choiceFullList[1],
+      };
+
+      axios
+        .post("/api/main-schedule", insertParams)
+        .then((res) => {
+          console.log(axios.defaults.headers.common, "test");
+          console.log(JSON.stringify(res.data.result));
+          if (res.data.result === "suc") {
+            alert("스케줄 등록에 성공하셨습니다.");
+
+            pageMove("/day", {
+              state: {
+                choiceDate: choiceFullList,
+                mainId: res.data.data,
+              },
+            });
+          } else if (res.data.result === "err") {
+            alert("스케줄 등록에 실패하셨습니다.");
+            return;
+          }
+        })
+        .catch((err) => console.log("catch" + err));
     } else if (type === "detail") {
       let mainId = getMainScheduleId(allTask, date);
 

@@ -1,0 +1,96 @@
+.taskAdd {
+  min-height: 100vh;
+  .inner {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 25px;
+    padding-top: 20px;
+
+    .title {
+      color: #00c6fb;
+    }
+
+    .day-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .dayList {
+      margin: 20px 0;
+      .day {
+        position: relative;
+        height: 60px;
+        display: flex;
+        margin: 0 20px 25px 0;
+        flex-direction: row;
+        justify-content: space-between;
+
+        input {
+          border: 1px solid gray;
+          font-size: 20px;
+          color: #2e2e2e;
+
+          &.title {
+            width: 43%;
+          }
+
+          &.content {
+            width: 43%;
+          }
+
+          &.priority {
+            width: 10%;
+          }
+        }
+
+        .up {
+          position: absolute;
+          top: -12px;
+          right: -40px;
+          display: inline-block;
+          width: 0;
+          height: 0;
+
+          border-top: 20px solid transparent;
+          border-bottom: 20px solid #00c6fb;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+        }
+        .down {
+          position: absolute;
+          bottom: -12px;
+          right: -40px;
+          display: inline-block;
+          width: 0;
+          height: 0;
+
+          border-top: 20px solid #00c6fb;
+          border-bottom: 20px solid transparent;
+          border-left: 20px solid transparent;
+          border-right: 20px solid transparent;
+        }
+      }
+    }
+
+    // 버튼
+    button {
+      color: #ffffff;
+      border-radius: 5px;
+      border: none;
+      padding: 10px 30px;
+      font-size: 15px;
+
+      &.add {
+        background-color: #4169e1;
+      }
+
+      //등록
+      &.insert {
+        width: 100%;
+        background-color: #00c6fb;
+      }
+    }
+  }
+}

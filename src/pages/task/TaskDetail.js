@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
-import "../assets/detail.scss";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../../assets/detail.scss";
 
 const TaskDetail = () => {
   const [detail, setDetail] = useState([]);
   const location = useLocation();
+  const pageMove = useNavigate();
+
   let mainScheduleId = location.state.mainScheduleId;
 
   // 메인 스케줄의 일별 과제 스케줄 조회 함수
@@ -53,7 +55,25 @@ const TaskDetail = () => {
           </div>
         );
       }
+      detailTask.push(
+        <button
+          key={detail[i].dailyScheduleId}
+          onClick={() => moveAddPage(detail[i].date)}
+          className="insert"
+        >
+          등록
+        </button>
+      );
     }
+
+    const moveAddPage = (choiceDate) => {
+      pageMove("/taskAdd", {
+        state: {
+          date: choiceDate,
+          mainId: mainScheduleId,
+        },
+      });
+    };
 
     return (
       <div>

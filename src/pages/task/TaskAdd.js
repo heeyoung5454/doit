@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../assets/taskAdd.scss";
+import "../../assets/taskAdd.scss";
 
 const TaskAdd = () => {
   const location = useLocation();
@@ -17,8 +17,6 @@ const TaskAdd = () => {
   const inputTask = (event, type, direct) => {
     const taskIndex = event.j;
     const value = event.e.target.value;
-
-    console.log(direct);
 
     setDayTaskList(
       dayTaskList.map((item, index) => {

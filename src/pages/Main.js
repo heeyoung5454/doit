@@ -222,8 +222,6 @@ const Main = () => {
         return;
       }
 
-      console.log(choiceFullList, "tttt");
-
       let insertParams = {
         startDate: choiceFullList[0],
         endDate: choiceFullList[1],
@@ -237,12 +235,18 @@ const Main = () => {
           if (res.data.result === "suc") {
             alert("스케줄 등록에 성공하셨습니다.");
 
-            pageMove("/day", {
+            pageMove("/detail", {
               state: {
-                choiceDate: choiceFullList,
-                mainId: res.data.data,
+                mainScheduleId: res.data.data,
               },
             });
+
+            // pageMove("/day", {
+            //   state: {
+            //     choiceDate: choiceFullList,
+            //     mainId: res.data.data,
+            //   },
+            // });
           } else if (res.data.result === "err") {
             alert("스케줄 등록에 실패하셨습니다.");
             return;

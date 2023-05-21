@@ -19,4 +19,18 @@
       justify-content: space-between;
     }
   }
+
+  button {
+    cursor: pointer;
+    color: #ffffff;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 30px;
+    font-size: 15px;
+    //등록
+    &.insert {
+      width: 100%;
+      background-color: #00c6fb;
+    }
+  }
 }

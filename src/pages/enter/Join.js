@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../assets/join.scss";
-import Modal from "./component/modal";
+import "../../assets/join.scss";
+import Modal from "../component/modal";
+import { useNavigate } from "react-router-dom";
 
 const Join = () => {
   const [inputs, setInputs] = useState({
@@ -48,9 +49,9 @@ const Join = () => {
     axios
       .post("http://localhost:8080/api/members/add", joinParams)
       .then((res) => {
-        console.log(JSON.stringify(res.data.result));
         if (res.data.result === "suc") {
           openModal();
+          setCloseType(true);
           changeModalMsg("회원가입에 성공했습니다.");
         } else if (res.data.result === "err") {
           openModal();
@@ -63,18 +64,25 @@ const Join = () => {
   // 모달창 제어
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState("");
+  const [closeType, setCloseType] = useState(false); // 기본 false
 
   const openModal = () => {
     setModalOpen(true);
   };
 
   const closeModal = () => {
+    if (closeType) {
+      movePage("/");
+    }
     setModalOpen(false); // 모달창 닫기
   };
 
-  const changeModalMsg = (msg) => {
+  const changeModalMsg = (msg, type) => {
     setModalMsg(msg);
   };
+
+  // 로그인 성공시 페이지 이동
+  const movePage = useNavigate();
 
   return (
     <div className="join">

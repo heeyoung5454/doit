@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../assets/login.scss";
-import Modal from "./component/modal";
+import "../../assets/login.scss";
+import Modal from "../component/modal";
 
-import imgLogin from "../assets/images/icon/user.png";
+import imgLogin from "../../assets/images/icon/user.png";
 
 const Login = () => {
   const [inputs, setInputs] = useState({

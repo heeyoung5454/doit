@@ -1,7 +1,7 @@
 import React from "react";
-import "../assets/main.scss";
+import "../../assets/main.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../assets/day.scss";
+import "../../assets/day.scss";
 
 const Main = () => {
   const location = useLocation();

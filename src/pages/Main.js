@@ -238,6 +238,7 @@ const Main = () => {
             pageMove("/detail", {
               state: {
                 mainScheduleId: res.data.data,
+                insertDate: choiceFullList,
               },
             });
 

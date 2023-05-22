@@ -3,7 +3,6 @@
   text-align: center;
   display: flex;
   justify-content: center;
-  background: -webkit-linear-gradient(bottom, #005bea, #00c6fb);
 
   .login-wrap {
     padding-top: 190px;
@@ -21,6 +20,7 @@
     .input-box {
       width: 100%;
       border-radius: 25px;
+      border: 1px solid #cccccc;
       background: #fff;
       margin-bottom: 10px;
 

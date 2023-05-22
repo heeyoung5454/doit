@@ -9,6 +9,9 @@ const TaskDetail = () => {
   const pageMove = useNavigate();
 
   let mainScheduleId = location.state.mainScheduleId;
+  let insertDate = location.state.insertDate;
+  console.log("0", mainScheduleId);
+  console.log("1", insertDate);
 
   // 메인 스케줄의 일별 과제 스케줄 조회 함수
   const getDailyTasks = (data) => {
@@ -32,10 +35,32 @@ const TaskDetail = () => {
 
   const printDetail = () => {
     let detailTask = [];
-    console.log(detail);
+    console.log("tttt", detail);
+    console.log("tttt", detail.length);
+    console.log(insertDate, "insertDate");
+
+    if (detail.length === 0 && insertDate) {
+      for (let k = 0; k < insertDate.length; k++) {
+        detailTask.push(
+          <div key={insertDate + "k"}>
+            <div>{insertDate[k]}</div>
+            <button
+              key={detail + "insert"}
+              onClick={() => moveAddPage(insertDate[k])}
+              className="insert"
+            >
+              등록
+            </button>
+          </div>
+        );
+      }
+
+      detailTask.push();
+    }
+
     for (let i = 0; i < detail.length; i++) {
       detailTask.push(
-        <div key={detail[i].dailyScheduleId} className="date">
+        <div key={detail[i].dailyScheduleId + "date"} className="date">
           {detail[i].date}
         </div>
       );
@@ -55,6 +80,7 @@ const TaskDetail = () => {
           </div>
         );
       }
+
       detailTask.push(
         <button
           key={detail[i].dailyScheduleId}

@@ -64,16 +64,16 @@
       color: #cccccc;
     }
 
-    .join {
+    .btn-join {
       font-size: 16px;
+      background-color: #2e2e2e;
+      padding: 15px 0;
+      width: 50%;
+      margin: 0 auto;
+      cursor: pointer;
       a {
         color: #cccccc;
         text-decoration: none;
-      }
-      &:hover {
-        cursor: pointer;
-        color: #ffffff;
-        font-weight: 700;
       }
     }
   }

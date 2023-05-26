@@ -114,7 +114,7 @@ const Login = () => {
         <button onClick={login}>로그인</button>
 
         <div className="findAccount">아이디/비밀번호 찾기</div>
-        <div className="join">
+        <div className="btn-join">
           <Link to="/Join">회원가입</Link>
         </div>
       </div>

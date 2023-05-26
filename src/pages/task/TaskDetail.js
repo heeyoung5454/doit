@@ -4,18 +4,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../assets/detail.scss";
 
 const TaskDetail = () => {
-  const [detail, setDetail] = useState([]);
+  const [detailTask, setDetailTask] = useState([]);
+  const [detailDate, setDetailDate] = useState([]);
   const location = useLocation();
   const pageMove = useNavigate();
 
   let mainScheduleId = location.state.mainScheduleId;
-  let insertDate = location.state.insertDate;
-  console.log("0", mainScheduleId);
-  console.log("1", insertDate);
 
   // 메인 스케줄의 일별 과제 스케줄 조회 함수
   const getDailyTasks = (data) => {
-    setDetail(data);
+    setDetailTask(data);
+  };
+
+  // 메인 스케줄의 날짜 리스트 설정
+  const getDateList = (data) => {
+    setDetailDate(data);
   };
 
   // useEffect -> 화면 렌더링 되기 전 실행
@@ -25,7 +28,8 @@ const TaskDetail = () => {
       .get(`/api/daily-task-schedule/${mainScheduleId}`)
       .then((res) => {
         if (res.data.result === "suc") {
-          getDailyTasks(res.data.data);
+          getDailyTasks(res.data.data.dailyTaskScheduleList);
+          getDateList(res.data.data.dates);
         } else if (res.data.result === "err") {
           alert("스케줄 조회에 실패하셨습니다.");
         }
@@ -34,69 +38,79 @@ const TaskDetail = () => {
   }, [mainScheduleId]);
 
   const printDetail = () => {
-    let detailTask = [];
-    console.log("tttt", detail);
-    console.log("tttt", detail.length);
-    console.log(insertDate, "insertDate");
+    let detailTaskList = [];
+    console.log("detailContent", detailTask);
 
-    if (detail.length === 0 && insertDate) {
-      for (let k = 0; k < insertDate.length; k++) {
-        detailTask.push(
-          <div key={insertDate + "k"}>
-            <div>{insertDate[k]}</div>
-            <button
-              key={detail + "insert"}
-              onClick={() => moveAddPage(insertDate[k])}
-              className="insert"
-            >
-              등록
-            </button>
-          </div>
-        );
+    console.log(detailDate, "detailDate");
+
+    for (let i = 0; i < detailDate.length; i++) {
+      for (let j = 0; j < detailTask.length; j++) {
+        console.log(detailDate[i], "tttt", detailTask[j].date);
+        console.log(detailDate[i], "fff", detailTask[j]);
+
+        // 일정이 이미 등록된 경우
+        if (detailDate[i] === detailTask[j].date) {
+          for (let k = 0; k < detailTask[j].taskSchedules.length; k++) {
+            console.log(detailTask[j].taskSchedules, "fff");
+
+            detailTaskList.push(
+              <div
+                key={
+                  detailTask[j].dailyScheduleId +
+                  "-" +
+                  detailTask[j].taskSchedules[k].taskScheduleId
+                }
+              >
+                <div>{detailDate[i]}</div>
+                <div className="task-schedule-list">
+                  <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
+                  <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
+                  <div>
+                    완료여부 : {detailTask[j].taskSchedules[k].complete}
+                  </div>
+                  <div>진행도 :{detailTask[j].taskSchedules[k].percent}</div>
+                  <button
+                    key={detailDate + "insert"}
+                    className="insert"
+                    onClick={() =>
+                      moveAddPage(detailDate[i], detailTask[j].taskSchedules[k])
+                    }
+                  >
+                    수정
+                  </button>
+                </div>
+              </div>
+            );
+          }
+        }
+        // 일정이 미등록된 경우
+        else {
+          detailTaskList.push(
+            <div key={detailDate[i] + "=" + i}>
+              <div>{detailDate[i]}</div>
+
+              <div className="task-schedule-list">
+                <div>등록된 일정이 없습니다</div>
+                <button
+                  key={detailDate + "insert"}
+                  className="insert"
+                  onClick={() => moveAddPage(detailDate[i])}
+                >
+                  등록
+                </button>
+              </div>
+            </div>
+          );
+        }
       }
-
-      detailTask.push();
     }
 
-    for (let i = 0; i < detail.length; i++) {
-      detailTask.push(
-        <div key={detail[i].dailyScheduleId + "date"} className="date">
-          {detail[i].date}
-        </div>
-      );
-
-      for (let j = 0; j < detail[i].taskSchedules.length; j++) {
-        detailTask.push(
-          <div
-            key={detail[i].taskSchedules[j].taskScheduleId}
-            className="task-schedule"
-          >
-            <div>우선순위 : {detail[i].taskSchedules[j].priority}</div>
-            <div>제목 : {detail[i].taskSchedules[j].title}</div>
-            <div>내용 : {detail[i].taskSchedules[j].content}</div>
-            <div>완료여부 : {detail[i].taskSchedules[j].complete}</div>
-
-            <div> 진행도 : {detail[i].taskSchedules[j].percent}</div>
-          </div>
-        );
-      }
-
-      detailTask.push(
-        <button
-          key={detail[i].dailyScheduleId}
-          onClick={() => moveAddPage(detail[i].date)}
-          className="insert"
-        >
-          등록
-        </button>
-      );
-    }
-
-    const moveAddPage = (choiceDate) => {
+    const moveAddPage = (choiceDate, taskList) => {
       pageMove("/taskAdd", {
         state: {
           date: choiceDate,
           mainId: mainScheduleId,
+          taskList: taskList,
         },
       });
     };
@@ -104,7 +118,7 @@ const TaskDetail = () => {
     return (
       <div>
         <h2> 일별 상세화면</h2>
-        <div className="content">{detailTask}</div>
+        <div className="content">{detailTaskList}</div>
       </div>
     );
   };

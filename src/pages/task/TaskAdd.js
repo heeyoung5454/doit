@@ -8,6 +8,7 @@ const TaskAdd = () => {
   const pageMove = useNavigate();
 
   let date = location.state.date;
+  let detailTaskList = location.state.taskList;
   let dayTask = [{ title: "", content: "", priority: "1" }];
 
   // 일별 task
@@ -152,6 +153,9 @@ const TaskAdd = () => {
         <button className="insert" onClick={(taskList) => dailyInsert()}>
           등록
         </button>
+
+        <hr />
+        <div>{JSON.stringify(detailTaskList)}</div>
       </div>
     </div>
   );

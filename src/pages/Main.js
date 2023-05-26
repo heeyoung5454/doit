@@ -155,7 +155,7 @@ const Main = () => {
       .get(`/api/main-schedule/${paramsYear}/${paramsMonth}`)
       .then((res) => {
         if (res.data.result === "suc") {
-          getMainTask(res.data.data);
+          getMainTask(res.data.data.mainScheduleList);
         } else if (res.data.result === "err") {
           alert("스케줄 조회에 실패하셨습니다.");
         }

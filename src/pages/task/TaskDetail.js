@@ -42,17 +42,45 @@ const TaskDetail = () => {
     console.log("detailContent", detailTask);
 
     console.log(detailDate, "detailDate");
+    // Task가 하나도 없을 경우
+    if (detailTask.length === 0) {
+      console.log("dkdkdk");
+      for (let i = 0; i < detailDate.length; i++) {
+        detailTaskList.push(
+          <div key={detailDate[i]} className="task-schedule-list">
+            <div>{detailDate[i]}</div>
+            <button
+              key={detailDate[i] + "insert"}
+              className="insert"
+              onClick={() => moveAddPage(detailDate[i])}
+            >
+              등록
+            </button>
+          </div>
+        );
+      }
+    }
 
     for (let i = 0; i < detailDate.length; i++) {
+      // Task가 한개 이상
       for (let j = 0; j < detailTask.length; j++) {
-        console.log(detailDate[i], "tttt", detailTask[j].date);
-        console.log(detailDate[i], "fff", detailTask[j]);
-
         // 일정이 이미 등록된 경우
         if (detailDate[i] === detailTask[j].date) {
+          detailTaskList.push(
+            <div className="detail-title">
+              <div>{detailDate[i]}</div>
+              <button
+                key={detailDate[i] + "insert"}
+                className="insert"
+                onClick={() =>
+                  moveAddPage(detailDate[i], detailTask[j].taskSchedules)
+                }
+              >
+                수정
+              </button>
+            </div>
+          );
           for (let k = 0; k < detailTask[j].taskSchedules.length; k++) {
-            console.log(detailTask[j].taskSchedules, "fff");
-
             detailTaskList.push(
               <div
                 key={
@@ -60,25 +88,25 @@ const TaskDetail = () => {
                   "-" +
                   detailTask[j].taskSchedules[k].taskScheduleId
                 }
+                className="task-schedule-list"
               >
-                <div>{detailDate[i]}</div>
-                <div className="task-schedule-list">
-                  <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
-                  <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
-                  <div>
-                    완료여부 : {detailTask[j].taskSchedules[k].complete}
-                  </div>
-                  <div>진행도 :{detailTask[j].taskSchedules[k].percent}</div>
-                  <button
-                    key={detailDate + "insert"}
-                    className="insert"
-                    onClick={() =>
-                      moveAddPage(detailDate[i], detailTask[j].taskSchedules[k])
-                    }
-                  >
-                    수정
-                  </button>
-                </div>
+                <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
+                <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
+                <div>완료여부 : {detailTask[j].taskSchedules[k].complete}</div>
+                <div>진행도 :{detailTask[j].taskSchedules[k].percent}</div>
+                <button
+                  className="complete"
+                  onClick={() =>
+                    completeTask(
+                      detailTask[j].taskSchedules[k].taskScheduleId,
+                      detailTask[j].taskSchedules[k].complete
+                    )
+                  }
+                >
+                  {detailTask[j].taskSchedules[k].complete === "N"
+                    ? "진행중"
+                    : "완료"}
+                </button>
               </div>
             );
           }
@@ -86,13 +114,13 @@ const TaskDetail = () => {
         // 일정이 미등록된 경우
         else {
           detailTaskList.push(
-            <div key={detailDate[i] + "=" + i}>
+            <div key={detailDate[i] + "-" + j}>
               <div>{detailDate[i]}</div>
 
               <div className="task-schedule-list">
                 <div>등록된 일정이 없습니다</div>
                 <button
-                  key={detailDate + "insert"}
+                  key={detailDate[i] + "insert"}
                   className="insert"
                   onClick={() => moveAddPage(detailDate[i])}
                 >
@@ -113,6 +141,29 @@ const TaskDetail = () => {
           taskList: taskList,
         },
       });
+    };
+
+    // 할일 완료
+    const completeTask = (taskId, _complete) => {
+      // 현재 상태값과 반대의 상태값으로 파라미터값 세팅
+      let complete = "";
+
+      if (_complete === "N") {
+        complete = "Y";
+      } else if (_complete === "Y") {
+        complete = "N";
+      }
+
+      axios
+        .patch(`/api/${taskId}/${complete}`)
+        .then((res) => {
+          if (res.data.result === "suc") {
+            alert("성공");
+          } else if (res.data.result === "err") {
+            alert("스케줄 조회에 실패하셨습니다.");
+          }
+        })
+        .catch((err) => console.log("catch" + err));
     };
 
     return (

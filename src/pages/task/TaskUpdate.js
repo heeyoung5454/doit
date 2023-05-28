@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../../assets/taskAdd.scss";
+import "../../assets/taskUpdate.scss";
 
-const TaskAdd = () => {
+const TaskUpdate = () => {
   const location = useLocation();
   const pageMove = useNavigate();
 
   let date = location.state.date;
-  let detailTaskList = location.state.taskList;
+  let detailTaskItem = location.state.detailTaskItem;
   let dayTask = [{ title: "", content: "", priority: "1" }];
+
+  // 이미 등록된 task가 있을 경우 >> 수정 페이지 & 초기값 설정
+  if (detailTaskItem) {
+    dayTask = detailTaskItem.taskSchedules;
+  }
 
   // 일별 task
   const [dayTaskList, setDayTaskList] = useState(dayTask);
@@ -150,15 +155,20 @@ const TaskAdd = () => {
         {JSON.stringify(dayTaskList)}
         <div>{date}</div>
         <div className="dayList">{printDayList()}</div>
-        <button className="insert" onClick={(taskList) => dailyInsert()}>
-          등록
-        </button>
+
+        {detailTaskItem ? (
+          <button className="update">수정</button>
+        ) : (
+          <button className="insert" onClick={(taskList) => dailyInsert()}>
+            등록
+          </button>
+        )}
 
         <hr />
-        <div>{JSON.stringify(detailTaskList)}</div>
+        <div>{JSON.stringify(detailTaskItem)}</div>
       </div>
     </div>
   );
 };
 
-export default TaskAdd;
+export default TaskUpdate;

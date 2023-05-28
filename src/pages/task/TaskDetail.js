@@ -40,11 +40,9 @@ const TaskDetail = () => {
   const printDetail = () => {
     let detailTaskList = [];
     console.log("detailContent", detailTask);
-
-    console.log(detailDate, "detailDate");
+    console.log("detailDate", detailDate);
     // Task가 하나도 없을 경우
     if (detailTask.length === 0) {
-      console.log("dkdkdk");
       for (let i = 0; i < detailDate.length; i++) {
         detailTaskList.push(
           <div key={detailDate[i]} className="task-schedule-list">
@@ -72,9 +70,7 @@ const TaskDetail = () => {
               <button
                 key={detailDate[i] + "insert"}
                 className="insert"
-                onClick={() =>
-                  moveAddPage(detailDate[i], detailTask[j].taskSchedules)
-                }
+                onClick={() => moveAddPage(detailDate[i], detailTask[j])}
               >
                 수정
               </button>
@@ -133,12 +129,12 @@ const TaskDetail = () => {
       }
     }
 
-    const moveAddPage = (choiceDate, taskList) => {
-      pageMove("/taskAdd", {
+    const moveAddPage = (choiceDate, taskItem) => {
+      pageMove("/taskUpdate", {
         state: {
           date: choiceDate,
           mainId: mainScheduleId,
-          taskList: taskList,
+          detailTaskItem: taskItem ? taskItem : null,
         },
       });
     };

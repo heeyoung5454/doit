@@ -5,7 +5,7 @@ import Join from "./pages/enter/Join";
 import Main from "./pages/Main";
 import Day from "./pages/task/Day";
 import TaskDetail from "./pages/task/TaskDetail";
-import TaskAdd from "./pages/task/TaskAdd";
+import TaskUpdate from "./pages/task/TaskUpdate";
 import "./App.scss";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
         <Route path="/main" element={<Main />} />
         <Route path="/day" element={<Day />} />
         <Route path="/detail" element={<TaskDetail />} />
-        <Route path="/taskAdd" element={<TaskAdd />} />
+        <Route path="/taskUpdate" element={<TaskUpdate />} />
       </Routes>
     </div>
   );

@@ -18,6 +18,7 @@ const TaskUpdate = () => {
 
   // 일별 task
   const [dayTaskList, setDayTaskList] = useState(dayTask);
+  const [delTaskList, setDelTaskList] = useState([]);
 
   // task 정보 설정
   const inputTask = (event, type, direct) => {
@@ -48,6 +49,18 @@ const TaskUpdate = () => {
     );
   };
 
+  const deleteTask = (event, taskScheduleId) => {
+    const taskIndex = event.j;
+
+    // taskScheduleId 있을 경우 (=기존에 등록된 경우) delTaskList에 추가
+    if (taskScheduleId) {
+      setDelTaskList([...delTaskList, taskScheduleId]);
+    }
+
+    // 현재 선택한 인덱스 제거하여 dayTaskList 셋팅 (화면 동기화)
+    setDayTaskList(dayTaskList.filter((item, index) => index !== taskIndex));
+  };
+
   // 화면 출력
   const printDayList = () => {
     let dayPrint = [];
@@ -63,7 +76,6 @@ const TaskUpdate = () => {
             placeholder="제목"
             onChange={(e) => inputTask({ e, j }, 0)}
           />
-
           <input
             className="content"
             id={"content-" + j}
@@ -72,7 +84,6 @@ const TaskUpdate = () => {
             placeholder="내용"
             onChange={(e) => inputTask({ e, j }, 1)}
           />
-
           <input
             className="priority"
             id={"priority-" + j}
@@ -81,7 +92,6 @@ const TaskUpdate = () => {
             placeholder="우선순위"
             onChange={(e) => inputTask({ e, j }, 2)}
           />
-
           <div
             className="up"
             onClick={(e) => inputTask({ e, j }, 2, "up")}
@@ -90,6 +100,18 @@ const TaskUpdate = () => {
             className="down"
             onClick={(e) => inputTask({ e, j }, 2, "down")}
           ></div>
+          {detailTaskItem ? (
+            <button
+              className="delete"
+              onClick={(e) =>
+                deleteTask({ e, j }, dayTaskList[j].taskScheduleId)
+              }
+            >
+              삭제
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       );
     }
@@ -149,6 +171,60 @@ const TaskUpdate = () => {
       );
   };
 
+  // 일별 일정수정 (API 호출)
+  const dailyUpdate = () => {
+    for (let i = 0; i < dayTaskList.length; i++) {
+      if (
+        !dayTaskList[i].title ||
+        !dayTaskList[i].content ||
+        !dayTaskList[i].priority
+      ) {
+        alert("필수값을 입력해주세요");
+        return;
+      }
+    }
+
+    let saveList = []; // 추가할 task
+    let updateList = []; // 수정할 task
+    for (let i = 0; i < dayTaskList.length; i++) {
+      // id가 있다 >> 기존 task (수정)
+      if (dayTaskList[i].taskScheduleId) {
+        updateList.push(dayTaskList[i]);
+      }
+      // id가 없다 >> 신규 task (추가)
+      else {
+        saveList.push(dayTaskList[i]);
+      }
+    }
+
+    let dayTaskParams = {
+      // 삭제할 task
+      deleteTaskList: delTaskList,
+      // 추가할 task
+      saveTaskList: saveList,
+      // 수정할 task (변경사항 없어도 포함)
+      updateTaskList: updateList,
+    };
+
+    let dailyScheduleId = detailTaskItem.dailyScheduleId;
+
+    axios
+      .post(`/api/task-schedule/${dailyScheduleId}`, dayTaskParams)
+      .then((res) => {
+        if (res.data.result === "suc") {
+          alert("스케줄 수정 성공하였습니다");
+        } else if (res.data.result === "err") {
+          alert("스케줄 등록에 실패하셨습니다.");
+          return;
+        }
+      })
+      .catch((err) => alert(JSON.stringify(err)))
+      .finally(() =>
+        // 등록 성공시 메인 페이지 이동
+        pageMove("/main")
+      );
+  };
+
   return (
     <div className="taskAdd">
       <div className="inner">
@@ -157,7 +233,9 @@ const TaskUpdate = () => {
         <div className="dayList">{printDayList()}</div>
 
         {detailTaskItem ? (
-          <button className="update">수정</button>
+          <button className="update" onClick={(taskList) => dailyUpdate()}>
+            수정
+          </button>
         ) : (
           <button className="insert" onClick={(taskList) => dailyInsert()}>
             등록
@@ -165,7 +243,8 @@ const TaskUpdate = () => {
         )}
 
         <hr />
-        <div>{JSON.stringify(detailTaskItem)}</div>
+        <dv>{JSON.stringify(detailTaskItem)}</dv>
+        <div>{JSON.stringify(delTaskList)}</div>
       </div>
     </div>
   );

@@ -71,6 +71,19 @@
           border-left: 20px solid transparent;
           border-right: 20px solid transparent;
         }
+
+        button {
+          &.delete {
+            position: absolute;
+            bottom: calc(50% - 25px);
+            right: -100px;
+            border-radius: 25px;
+            background-color: #ff2424;
+            padding: 0;
+            height: 50px;
+            width: 50px;
+          }
+        }
       }
     }
 

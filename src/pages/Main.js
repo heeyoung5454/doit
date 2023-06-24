@@ -139,16 +139,42 @@ const CalCell = ({
 
 // 친구 목록
 const FriendList = () => {
-  const friend = [];
+  const [friendList, setFriendList] = useState([]);
 
-  console.log(friend);
+  // 친구 목록 불러오기 :: 화면 랜더링 전에 실행
+  useEffect(() => {
+    axios
+      .get("/friends")
+      .then((res) => {
+        if (res.data.result === "suc") {
+          // 친구 리스트 설정
+          setFriendList(res.data.data);
+        } else if (res.data.result === "err") {
+          alert("친구 목록 불러오기 실패하였습니다");
+          return;
+        }
+      })
+      .catch((err) => console.log("catch :: " + err));
+  }, []);
+
+  const printFriend = () => {
+    let getFriendList = [];
+    for (let i = 0; i < friendList.length; i++) {
+      getFriendList.push(
+        <div className="friend-item" key={i}>
+          {friendList[i].nickname}
+        </div>
+      );
+    }
+
+    return getFriendList;
+  };
 
   const addFriend = () => {
     let testFriendId = 2;
     axios
       .post("/friends?friendId=" + testFriendId)
       .then((res) => {
-        console.log(res);
         if (res.data.result === "suc") {
           alert("성공하셨습니다.");
         } else if (res.data.result === "err") {
@@ -163,6 +189,7 @@ const FriendList = () => {
     <div>
       <div className="friend-list">
         <h2>친구 목록</h2>
+        <div>{printFriend()}</div>
       </div>
       <div className="friend-add">
         <button onClick={() => addFriend()}>친구추가</button>

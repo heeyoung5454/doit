@@ -1,11 +1,11 @@
 .main {
   display: flex;
   justify-content: space-between;
+  max-width: 95%;
+  margin: 0 auto;
 
   .calendar {
-    min-width: 700px;
-    max-width: 1050px;
-    // margin: 0 auto;
+    width: 65%;
     .header {
       display: flex;
       justify-content: space-between;
@@ -38,7 +38,7 @@
         .week {
           background-color: #333333;
           min-width: 100px;
-          //max-width: 150px;
+          width: 100%;
           text-align: center;
           height: 40px;
           box-sizing: border-box;
@@ -56,7 +56,7 @@
 
       .cell {
         min-width: 100px;
-        //max-width: 150px;
+        width: 100%;
         height: 130px;
         box-sizing: border-box;
         padding: 10px 0;
@@ -151,7 +151,9 @@
   }
 
   .friend {
-    width: 20%;
+    text-align: center;
+    position: relative;
+    width: 35%;
     h2 {
       font-size: 20px;
     }
@@ -161,12 +163,15 @@
     }
 
     .friend-add {
-      width: 70%;
-      margin: 0 auto;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
       button {
         font-size: 18px;
         background-color: aqua;
-        width: 100%;
+        width: 80%;
+        margin: 0 10%;
         min-width: 100px;
         height: 50px;
         text-align: center;

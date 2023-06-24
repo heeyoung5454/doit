@@ -13,6 +13,7 @@ import {
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import axios from "axios";
+import Header from "../layout/header";
 
 // reference site https://sennieworld.tistory.com/74
 
@@ -327,31 +328,34 @@ const Main = () => {
   };
 
   return (
-    <div className="main">
-      <div className="calendar">
-        <CalHeader
-          nowMonth={nowMonth}
-          prevMonth={prevMonth}
-          nextMonth={nextMonth}
-        />
-        <CalDays />
-        <CalCell
-          nowMonth={nowMonth}
-          selectDate={selectDate}
-          onDateClick={onDateClick}
-          allTasked={mainTask}
-          detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
-        />
-        <div className="set-date">
-          <div>시작일 : {choiceFullList[0]}</div>
-          <div>종료일 : {choiceFullList[1]}</div>
+    <div>
+      <Header />
+      <div className="main">
+        <div className="calendar">
+          <CalHeader
+            nowMonth={nowMonth}
+            prevMonth={prevMonth}
+            nextMonth={nextMonth}
+          />
+          <CalDays />
+          <CalCell
+            nowMonth={nowMonth}
+            selectDate={selectDate}
+            onDateClick={onDateClick}
+            allTasked={mainTask}
+            detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
+          />
+          <div className="set-date">
+            <div>시작일 : {choiceFullList[0]}</div>
+            <div>종료일 : {choiceFullList[1]}</div>
+          </div>
+          <button className="next" onClick={() => moveUrl("add")}>
+            등록하기
+          </button>
         </div>
-        <button className="next" onClick={() => moveUrl("add")}>
-          등록하기
-        </button>
-      </div>
-      <div className="friend">
-        <FriendList />
+        <div className="friend">
+          <FriendList />
+        </div>
       </div>
     </div>
   );

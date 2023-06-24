@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/main.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../assets/day.scss";
+import Header from "../../layout/header";
 
 const Main = () => {
   const location = useLocation();
@@ -77,12 +78,15 @@ const Main = () => {
   };
 
   return (
-    <div className="dayInput">
-      <div className="inner">
-        <div className="title">
-          {location.state.choiceDate[0]} ~ {location.state.choiceDate[1]}
+    <div>
+      <Header />
+      <div className="dayInput">
+        <div className="inner">
+          <div className="title">
+            {location.state.choiceDate[0]} ~ {location.state.choiceDate[1]}
+          </div>
+          <div className="dayList">{printDayList()}</div>
         </div>
-        <div className="dayList">{printDayList()}</div>
       </div>
     </div>
   );

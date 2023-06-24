@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../assets/detail.scss";
+import Header from "../../layout/header";
 
 const TaskDetail = () => {
   const [detailTask, setDetailTask] = useState([]);
@@ -170,7 +171,12 @@ const TaskDetail = () => {
     );
   };
 
-  return <div className="task-detail">{printDetail()}</div>;
+  return (
+    <div>
+      <Header />
+      <div className="task-detail">{printDetail()}</div>
+    </div>
+  );
 };
 
 export default TaskDetail;

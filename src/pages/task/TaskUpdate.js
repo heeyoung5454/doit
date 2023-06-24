@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../assets/taskUpdate.scss";
+import Header from "../../layout/header";
 
 const TaskUpdate = () => {
   const location = useLocation();
@@ -226,25 +227,28 @@ const TaskUpdate = () => {
   };
 
   return (
-    <div className="taskAdd">
-      <div className="inner">
-        {JSON.stringify(dayTaskList)}
-        <div>{date}</div>
-        <div className="dayList">{printDayList()}</div>
+    <div>
+      <Header />
+      <div className="taskAdd">
+        <div className="inner">
+          {JSON.stringify(dayTaskList)}
+          <div>{date}</div>
+          <div className="dayList">{printDayList()}</div>
 
-        {detailTaskItem ? (
-          <button className="update" onClick={(taskList) => dailyUpdate()}>
-            수정
-          </button>
-        ) : (
-          <button className="insert" onClick={(taskList) => dailyInsert()}>
-            등록
-          </button>
-        )}
+          {detailTaskItem ? (
+            <button className="update" onClick={(taskList) => dailyUpdate()}>
+              수정
+            </button>
+          ) : (
+            <button className="insert" onClick={(taskList) => dailyInsert()}>
+              등록
+            </button>
+          )}
 
-        <hr />
-        <dv>{JSON.stringify(detailTaskItem)}</dv>
-        <div>{JSON.stringify(delTaskList)}</div>
+          <hr />
+          <dv>{JSON.stringify(detailTaskItem)}</dv>
+          <div>{JSON.stringify(delTaskList)}</div>
+        </div>
       </div>
     </div>
   );

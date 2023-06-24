@@ -13,7 +13,6 @@ import {
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import axios from "axios";
-import { setCookie, getCookie } from "../utile/cookie";
 
 // reference site https://sennieworld.tistory.com/74
 
@@ -327,13 +326,6 @@ const Main = () => {
     }
   };
 
-  const removeCookie = (name) => {
-    setCookie("test2", "12345");
-    let test = getCookie(name);
-    console.log(getCookie("test2"));
-    console.log(test, "cookie");
-  };
-
   return (
     <div className="main">
       <div className="calendar">
@@ -357,8 +349,6 @@ const Main = () => {
         <button className="next" onClick={() => moveUrl("add")}>
           등록하기
         </button>
-
-        <div onClick={() => removeCookie("JSESSIONID")}>로그아웃</div>
       </div>
       <div className="friend">
         <FriendList />

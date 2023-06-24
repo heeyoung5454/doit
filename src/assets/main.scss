@@ -1,7 +1,8 @@
 .main {
   display: flex;
   justify-content: space-between;
-  max-width: 95%;
+  max-width: 90%;
+  min-width: 1085px;
   margin: 0 auto;
 
   .calendar {

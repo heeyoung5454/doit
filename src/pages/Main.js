@@ -137,6 +137,40 @@ const CalCell = ({
   return <div className="body">{rows} </div>;
 };
 
+// 친구 목록
+const FriendList = () => {
+  const friend = [];
+
+  console.log(friend);
+
+  const addFriend = () => {
+    let testFriendId = 2;
+    axios
+      .post("/friends?friendId=" + testFriendId)
+      .then((res) => {
+        console.log(res);
+        if (res.data.result === "suc") {
+          alert("성공하셨습니다.");
+        } else if (res.data.result === "err") {
+          alert("실패하셨습니다.");
+          return;
+        }
+      })
+      .catch((err) => console.log("catch :: " + err));
+  };
+
+  return (
+    <div>
+      <div className="friend-list">
+        <h2>친구 목록</h2>
+      </div>
+      <div className="friend-add">
+        <button onClick={() => addFriend()}>친구추가</button>
+      </div>
+    </div>
+  );
+};
+
 const Main = () => {
   const [nowMonth, setNowMonth] = useState(new Date());
   const [mainTask, setMainTask] = useState([]);
@@ -274,29 +308,34 @@ const Main = () => {
   };
 
   return (
-    <div className="calendar">
-      <CalHeader
-        nowMonth={nowMonth}
-        prevMonth={prevMonth}
-        nextMonth={nextMonth}
-      />
-      <CalDays />
-      <CalCell
-        nowMonth={nowMonth}
-        selectDate={selectDate}
-        onDateClick={onDateClick}
-        allTasked={mainTask}
-        detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
-      />
-      <div className="set-date">
-        <div>시작일 : {choiceFullList[0]}</div>
-        <div>종료일 : {choiceFullList[1]}</div>
-      </div>
-      <button className="next" onClick={() => moveUrl("add")}>
-        등록하기
-      </button>
+    <div className="main">
+      <div className="calendar">
+        <CalHeader
+          nowMonth={nowMonth}
+          prevMonth={prevMonth}
+          nextMonth={nextMonth}
+        />
+        <CalDays />
+        <CalCell
+          nowMonth={nowMonth}
+          selectDate={selectDate}
+          onDateClick={onDateClick}
+          allTasked={mainTask}
+          detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
+        />
+        <div className="set-date">
+          <div>시작일 : {choiceFullList[0]}</div>
+          <div>종료일 : {choiceFullList[1]}</div>
+        </div>
+        <button className="next" onClick={() => moveUrl("add")}>
+          등록하기
+        </button>
 
-      <div onClick={() => removeCookie("JSESSIONID")}>로그아웃</div>
+        <div onClick={() => removeCookie("JSESSIONID")}>로그아웃</div>
+      </div>
+      <div className="friend">
+        <FriendList />
+      </div>
     </div>
   );
 };

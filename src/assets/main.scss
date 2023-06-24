@@ -1,143 +1,175 @@
-.calendar {
-  max-width: 1050px;
-  margin: 0 auto;
-  .header {
-    display: flex;
-    justify-content: space-between;
-    .title {
-      .month {
-        font-size: 50px;
-        margin-left: 10px;
-        .eng {
-          font-size: 25px;
-          margin: 0 5px;
+.main {
+  display: flex;
+  justify-content: space-between;
+
+  .calendar {
+    min-width: 700px;
+    max-width: 1050px;
+    // margin: 0 auto;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      .title {
+        .month {
+          font-size: 50px;
+          margin-left: 10px;
+          .eng {
+            font-size: 25px;
+            margin: 0 5px;
+          }
+        }
+        .year {
+          font-size: 15px;
         }
       }
-      .year {
-        font-size: 15px;
+
+      .arrow {
+        padding-top: 20px;
+        svg {
+          margin: 0 5px;
+          cursor: pointer;
+        }
       }
     }
 
-    .arrow {
-      padding-top: 20px;
-      svg {
-        margin: 0 5px;
-        cursor: pointer;
-      }
-    }
-  }
+    .row {
+      display: flex;
+      &.day {
+        .week {
+          background-color: #333333;
+          min-width: 100px;
+          //max-width: 150px;
+          text-align: center;
+          height: 40px;
+          box-sizing: border-box;
+          padding: 10px 0;
+          color: #ffffff;
+          &:first-child {
+            background-color: red;
+          }
 
-  .row {
-    display: flex;
-    &.day {
-      .week {
-        background-color: #333333;
-        width: 150px;
-        text-align: center;
-        height: 40px;
+          &:last-child {
+            background-color: royalblue;
+          }
+        }
+      }
+
+      .cell {
+        min-width: 100px;
+        //max-width: 150px;
+        height: 130px;
         box-sizing: border-box;
         padding: 10px 0;
-        color: #ffffff;
+        border-right: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+        text-align: left;
+        cursor: pointer;
+        font-size: 15px;
+
+        .daily {
+          padding: 0 10px;
+        }
+
         &:first-child {
-          background-color: red;
+          color: red;
+          font-weight: 900;
+          border-left: 1px solid #cccccc;
         }
-
         &:last-child {
-          background-color: royalblue;
+          color: royalblue;
+          font-weight: 900;
+        }
+
+        .check {
+          display: inline-block;
+
+          width: 100%;
+          height: 15px;
+          background-color: #00c6fb;
+        }
+        //
+        //.not-vaild {
+        //  color: black !important;
+        //}
+
+        &.disabled {
+          color: #dddddd;
         }
       }
     }
 
-    .cell {
-      width: 150px;
-      height: 130px;
-      box-sizing: border-box;
-      padding: 10px 0;
-      border-right: 1px solid #cccccc;
-      border-bottom: 1px solid #cccccc;
-      text-align: left;
-      cursor: pointer;
-      font-size: 15px;
+    &.scroll {
+      position: relative;
 
-      .daily {
-        padding: 0 10px;
+      .text-today {
+        margin-bottom: 50px;
       }
 
-      &:first-child {
-        color: red;
-        font-weight: 900;
-        border-left: 1px solid #cccccc;
-      }
-      &:last-child {
-        color: royalblue;
-        font-weight: 900;
+      .day {
+        position: fixed;
       }
 
-      .check {
+      .header {
+        position: absolute;
+        top: 25px;
+        left: 0;
+      }
+
+      .calendar-list {
+        border-bottom: 1px solid #cccccc;
+        padding-top: 40px;
+        margin-top: 40px;
+        max-height: 700px;
+        overflow-y: scroll;
+      }
+    }
+
+    .set-date {
+      margin: 20px 0;
+      font-size: 20px;
+      div {
         display: inline-block;
+        width: 50%;
+      }
+    }
 
+    button {
+      color: #ffffff;
+      border-radius: 5px;
+      border: none;
+      padding: 10px 30px;
+      font-size: 15px;
+      background-color: #00c6fb;
+
+      &.next {
+        float: right;
+        ::after {
+          clear: both;
+        }
+      }
+    }
+  }
+
+  .friend {
+    width: 20%;
+    h2 {
+      font-size: 20px;
+    }
+
+    .friend-list {
+      min-height: 500px;
+    }
+
+    .friend-add {
+      width: 70%;
+      margin: 0 auto;
+      button {
+        font-size: 18px;
+        background-color: aqua;
         width: 100%;
-        height: 15px;
-        background-color: #00c6fb;
-      }
-      //
-      //.not-vaild {
-      //  color: black !important;
-      //}
-
-      &.disabled {
-        color: #dddddd;
-      }
-    }
-  }
-
-  &.scroll {
-    position: relative;
-
-    .text-today {
-      margin-bottom: 50px;
-    }
-
-    .day {
-      position: fixed;
-    }
-
-    .header {
-      position: absolute;
-      top: 25px;
-      left: 0;
-    }
-
-    .calendar-list {
-      border-bottom: 1px solid #cccccc;
-      padding-top: 40px;
-      margin-top: 40px;
-      max-height: 700px;
-      overflow-y: scroll;
-    }
-  }
-
-  .set-date {
-    margin: 20px 0;
-    font-size: 20px;
-    div {
-      display: inline-block;
-      width: 50%;
-    }
-  }
-
-  button {
-    color: #ffffff;
-    border-radius: 5px;
-    border: none;
-    padding: 10px 30px;
-    font-size: 15px;
-    background-color: #00c6fb;
-
-    &.next {
-      float: right;
-      ::after {
-        clear: both;
+        min-width: 100px;
+        height: 50px;
+        text-align: center;
       }
     }
   }

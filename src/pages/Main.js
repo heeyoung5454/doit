@@ -14,6 +14,7 @@ import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import axios from "axios";
 import Header from "../layout/header";
+import SearchPop from "../pages/friend/searchPopl";
 
 // reference site https://sennieworld.tistory.com/74
 
@@ -185,6 +186,18 @@ const FriendList = () => {
       .catch((err) => console.log("catch :: " + err));
   };
 
+  // 모달창 제어
+  const [modalOpen, setModalOpen] = useState(false); // 팝업 호출
+  //const [modalMsg, setModalMsg] = useState(""); // 팝업 메세지
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div>
       <div className="friend-list">
@@ -193,6 +206,11 @@ const FriendList = () => {
       </div>
       <div className="friend-add">
         <button onClick={() => addFriend()}>친구추가</button>
+      </div>
+
+      <SearchPop open={modalOpen} close={closeModal} />
+      <div className="friend-search">
+        <button onClick={() => openModal()}>친구검색(팝업)</button>
       </div>
     </div>
   );

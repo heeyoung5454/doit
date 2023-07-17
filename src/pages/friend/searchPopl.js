@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../assets/modal.scss";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SearchPop = (props) => {
   const [inputs, setInputs] = useState({
@@ -43,12 +44,25 @@ const SearchPop = (props) => {
       searchMemberList.push(
         <div className="member" key={i}>
           {memberList[i].nickname} //
-          {memberList[i].memberId}
+          <button onClick={() => moveHome(memberList[i].memberId)}>
+            {memberList[i].memberId}
+          </button>
         </div>
       );
     }
 
     return <div className="member-list">{searchMemberList} </div>;
+  };
+
+  // 페이지 이동
+  const pageMove = useNavigate();
+
+  const moveHome = (memberId) => {
+    pageMove("/home/" + memberId, {
+      state: {
+        memberId: memberId,
+      },
+    });
   };
 
   if (props.open) {

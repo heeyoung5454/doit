@@ -6,6 +6,7 @@ import Main from "./pages/Main";
 import Day from "./pages/task/Day";
 import TaskDetail from "./pages/task/TaskDetail";
 import TaskUpdate from "./pages/task/TaskUpdate";
+import Home from "./pages/friend/Home";
 import "./App.scss";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/day" element={<Day />} />
         <Route path="/detail" element={<TaskDetail />} />
         <Route path="/taskUpdate" element={<TaskUpdate />} />
+        <Route path="/home:id" element={<Home />} />
       </Routes>
     </div>
   );

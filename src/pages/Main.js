@@ -100,7 +100,8 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked, detailClick }) 
 
 // 친구 목록
 const FriendList = () => {
-  const [friendList, setFriendList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
+  const [followBackList, setFollowBackList] = useState([]);
 
   // 친구 목록 불러오기 :: 화면 랜더링 전에 실행
   useEffect(() => {
@@ -109,7 +110,8 @@ const FriendList = () => {
       .then((res) => {
         if (res.data.result === "suc") {
           // 친구 리스트 설정
-          setFriendList(res.data.data);
+          setFollowingList(res.data.data.followingList);
+          setFollowBackList(res.data.data.followBackList);
         } else if (res.data.result === "err") {
           alert("친구 목록 불러오기 실패하였습니다");
           return;
@@ -118,20 +120,7 @@ const FriendList = () => {
       .catch((err) => console.log("catch :: " + err));
   }, []);
 
-  const printFriend = () => {
-    let getFriendList = [];
-    for (let i = 0; i < friendList.length; i++) {
-      getFriendList.push(
-        <div className='friend-item' key={i}>
-          {friendList[i].nickname}
-        </div>
-      );
-    }
-
-    return getFriendList;
-  };
-
-  // 모달창 제어
+  // 모달창 제어(친구 팝업)
   const [modalOpen, setModalOpen] = useState(false); // 팝업 호출
   //const [modalMsg, setModalMsg] = useState(""); // 팝업 메세지
 
@@ -143,17 +132,66 @@ const FriendList = () => {
     setModalOpen(false);
   };
 
+  // 팔로우 취소
+  const followCancel = (friendId) => {
+    axios
+      .post("/friends/cancel?friendId=" + friendId)
+      .then((res) => {
+        if (res.data.result === "suc") {
+          alert("팔로우를 취소하였습니다.");
+        } else if (res.data.result === "err") {
+          alert("팔로우를 취소 실패하셨습니다.");
+        }
+      })
+      .catch((err) => console.log("catch" + err));
+  };
+
+  const getFollowingList = [];
+  const getFollowBackList = [];
+
+  console.log(followingList, "followingList");
+  console.log(followBackList, "followBackList");
+
+  for (let i = 0; i < followingList.length; i++) {
+    getFollowingList.push(
+      <div className='friend-item' key={i}>
+        <span>{followingList[i].nickname}</span>
+        <button className='cancel' onClick={() => followCancel(followingList[i].friendId)}>
+          팔로잉 취소
+        </button>
+      </div>
+    );
+  }
+
+  for (let j = 0; j < followBackList.length; j++) {
+    getFollowBackList.push(
+      <div className='friend-item' key={j}>
+        <span>{followBackList[j].nickname}</span>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className='friend-list'>
+    <div className='friend-list'>
+      <div>
         <h2>친구 목록</h2>
-        <div>{printFriend()}</div>
+
+        <div className='follow-back'>
+          <h3>맞팔친구</h3>
+          <div>{getFollowBackList}</div>
+        </div>
+
+        <div className='follow-ing'>
+          <h3>팔로잉친구</h3>
+          <div>{getFollowingList}</div>
+        </div>
       </div>
 
       <SearchPop open={modalOpen} close={closeModal} />
-      <div className='friend-search'>
-        <button onClick={() => openModal()}>친구 찾기</button>
-      </div>
+
+      <button className='search' onClick={() => openModal()}>
+        친구 찾기
+      </button>
     </div>
   );
 };

@@ -156,12 +156,68 @@
     text-align: center;
     position: relative;
     width: 35%;
-    h2 {
-      font-size: 20px;
-    }
 
     .friend-list {
       min-height: 500px;
+
+      h2 {
+        font-size: 25px;
+        margin-bottom: 40px;
+      }
+
+      h3 {
+        font-size: 20px;
+        margin-bottom: 30px;
+      }
+
+      // 맞팔 목록
+      .follow-back {
+        padding: 30px;
+        box-sizing: border-box;
+        margin-bottom: 40px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        height: 380px;
+        overflow-y: scroll;
+      }
+
+      // 팔로잉 목록
+      .follow-ing {
+        padding: 30px;
+        box-sizing: border-box;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        height: 380px;
+        overflow-y: scroll;
+      }
+
+      // 친구 목록(공통)
+      .friend-item {
+        font-size: 15px;
+        display: flex;
+        height: 30px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+
+        // 팔로잉 취소 버튼
+        .cancel {
+          padding: 5px 10px;
+          border-radius: 5px;
+          color: #ffffff;
+          background-color: #333333;
+        }
+      }
+
+      .search {
+        position: absolute;
+        bottom: 0;
+        left: 10%;
+        padding: 10px 0;
+        width: 80%;
+        color: #ffffff;
+        background-color: #333333;
+      }
     }
   }
 }

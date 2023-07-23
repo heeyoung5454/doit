@@ -1,0 +1,106 @@
+.modal-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: modal-bg-show 0.3s;
+
+  .modal-wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+
+    .friend-modal {
+      position: absolute;
+      top: calc(50% - 150px);
+      left: calc(50% - 250px);
+      width: 500px;
+      min-height: 300px;
+      box-sizing: border-box;
+      overflow-y: scroll;
+      padding: 50px 50px 100px;
+      background-color: #ccc;
+      border-radius: 5px;
+
+      // 모달창 최상단 타이틀
+      h1 {
+        font-size: 24px;
+      }
+
+      // 모달창 내용
+      .modal-content {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        p {
+          text-align: center;
+          box-sizing: border-box;
+          width: 100%;
+          padding: 30px;
+          font-size: 18px;
+        }
+
+        .member-list {
+          .member {
+            display: flex;
+            height: 40px;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            // 페이지 바로가기
+            .go {
+              padding: 10px 5px;
+              min-width: 100px;
+            }
+
+            // 친구추가
+            .add {
+              border-radius: 5px;
+              color: #fff6f4;
+              font-weight: 700;
+              background-color: #ffa41b;
+              padding: 10px 5px;
+              min-width: 100px;
+              text-align: center;
+            }
+          }
+        }
+      }
+
+      .btn-confirm {
+        position: absolute;
+        bottom: 10%;
+        left: calc(50% - 50px);
+        background-color: #0a1521;
+        color: #ffffff;
+        width: 100px;
+        padding: 12px;
+        border-radius: 2px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+@keyframes modal-show {
+  from {
+    opacity: 0;
+    margin-top: -50px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+@keyframes modal-bg-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

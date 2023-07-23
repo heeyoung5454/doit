@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import {
-  format,
-  addMonths,
-  subMonths,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-} from "date-fns";
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import axios from "axios";
@@ -20,20 +12,18 @@ import SearchPop from "../pages/friend/searchPopl";
 
 const CalHeader = ({ nowMonth, prevMonth, nextMonth }) => {
   return (
-    <div className="header">
-      <div className="title">
-        <span className="month">
+    <div className='header'>
+      <div className='title'>
+        <span className='month'>
           {format(nowMonth, "M")}
-          <span className="eng">
-            {nowMonth.toLocaleString("en-US", { month: "long" })}
-          </span>
+          <span className='eng'>{nowMonth.toLocaleString("en-US", { month: "long" })}</span>
         </span>
 
-        <span className="year">{format(nowMonth, "yyyy")}</span>
+        <span className='year'>{format(nowMonth, "yyyy")}</span>
       </div>
-      <div className="arrow">
-        <Icon icon="bi:arrow-left-circle-fill" onClick={prevMonth} />
-        <Icon icon="bi:arrow-right-circle-fill" onClick={nextMonth} />
+      <div className='arrow'>
+        <Icon icon='bi:arrow-left-circle-fill' onClick={prevMonth} />
+        <Icon icon='bi:arrow-right-circle-fill' onClick={nextMonth} />
       </div>
     </div>
   );
@@ -45,26 +35,21 @@ const CalDays = () => {
 
   for (let i = 0; i < 7; i++) {
     days.push(
-      <div className="week" key={i}>
+      <div className='week' key={i}>
         {date[i]}
       </div>
     );
   }
 
-  return <div className="day row">{days}</div>;
+  return <div className='day row'>{days}</div>;
 };
 
 const getMainScheduleId = (allTasked, nowDate) => {
   for (let i = 0; i < allTasked.length; i++) {
-    let stDate = new Date(
-      new Date(allTasked[i].startDate).setHours(0, 0, 0, 0)
-    );
+    let stDate = new Date(new Date(allTasked[i].startDate).setHours(0, 0, 0, 0));
     let endDate = new Date(new Date(allTasked[i].endDate).setHours(0, 0, 0, 0));
 
-    if (
-      nowDate.getTime() >= stDate.getTime() &&
-      nowDate.getTime() <= endDate.getTime()
-    ) {
+    if (nowDate.getTime() >= stDate.getTime() && nowDate.getTime() <= endDate.getTime()) {
       return allTasked[i].mainScheduleId;
     }
   }
@@ -72,13 +57,7 @@ const getMainScheduleId = (allTasked, nowDate) => {
   return false;
 };
 
-const CalCell = ({
-  nowMonth,
-  selectDate,
-  onDateClick,
-  allTasked,
-  detailClick,
-}) => {
+const CalCell = ({ nowMonth, selectDate, onDateClick, allTasked, detailClick }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -97,31 +76,12 @@ const CalCell = ({
 
       days.push(
         <div
-          className={`cell ${
-            !isSameMonth(day, monthStart)
-              ? "disabled"
-              : isSameDay(day, selectDate)
-              ? "selected"
-              : format(nowMonth, "M") !== format(day, "M")
-              ? "not-valid"
-              : "valid"
-          }`}
+          className={`cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectDate) ? "selected" : format(nowMonth, "M") !== format(day, "M") ? "not-valid" : "valid"}`}
           key={day}
           onClick={() => onDateClick(cloneDay)}
         >
-          <span
-            className={
-              format(nowMonth, "M") !== format(day, "M")
-                ? "not-vaild daily"
-                : "daily"
-            }
-          >
-            {formattedDate}
-          </span>
-          <span
-            className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""}
-            onClick={() => detailClick(allTasked, cloneDay)}
-          ></span>
+          <span className={format(nowMonth, "M") !== format(day, "M") ? "not-vaild daily" : "daily"}>{formattedDate}</span>
+          <span className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""} onClick={() => detailClick(allTasked, cloneDay)}></span>
         </div>
       );
 
@@ -129,13 +89,13 @@ const CalCell = ({
     }
 
     rows.push(
-      <div className="row" key={day}>
+      <div className='row' key={day}>
         {days}
       </div>
     );
     days = [];
   }
-  return <div className="body">{rows} </div>;
+  return <div className='body'>{rows} </div>;
 };
 
 // 친구 목록
@@ -162,28 +122,13 @@ const FriendList = () => {
     let getFriendList = [];
     for (let i = 0; i < friendList.length; i++) {
       getFriendList.push(
-        <div className="friend-item" key={i}>
+        <div className='friend-item' key={i}>
           {friendList[i].nickname}
         </div>
       );
     }
 
     return getFriendList;
-  };
-
-  const addFriend = () => {
-    let testFriendId = 2;
-    axios
-      .post("/friends?friendId=" + testFriendId)
-      .then((res) => {
-        if (res.data.result === "suc") {
-          alert("성공하셨습니다.");
-        } else if (res.data.result === "err") {
-          alert("실패하셨습니다.");
-          return;
-        }
-      })
-      .catch((err) => console.log("catch :: " + err));
   };
 
   // 모달창 제어
@@ -200,17 +145,14 @@ const FriendList = () => {
 
   return (
     <div>
-      <div className="friend-list">
+      <div className='friend-list'>
         <h2>친구 목록</h2>
         <div>{printFriend()}</div>
       </div>
-      <div className="friend-add">
-        <button onClick={() => addFriend()}>친구추가</button>
-      </div>
 
       <SearchPop open={modalOpen} close={closeModal} />
-      <div className="friend-search">
-        <button onClick={() => openModal()}>친구검색(팝업)</button>
+      <div className='friend-search'>
+        <button onClick={() => openModal()}>친구 찾기</button>
       </div>
     </div>
   );
@@ -270,8 +212,7 @@ const Main = () => {
       date = "0" + date;
     }
 
-    let fullDate =
-      convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
+    let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
 
     // 현재 있는 choiceFullList가 1개이하라면 그냥 푸시
     if (choiceFullList.length <= 2) {
@@ -348,30 +289,20 @@ const Main = () => {
   return (
     <div>
       <Header />
-      <div className="main">
-        <div className="calendar">
-          <CalHeader
-            nowMonth={nowMonth}
-            prevMonth={prevMonth}
-            nextMonth={nextMonth}
-          />
+      <div className='main'>
+        <div className='calendar'>
+          <CalHeader nowMonth={nowMonth} prevMonth={prevMonth} nextMonth={nextMonth} />
           <CalDays />
-          <CalCell
-            nowMonth={nowMonth}
-            selectDate={selectDate}
-            onDateClick={onDateClick}
-            allTasked={mainTask}
-            detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
-          />
-          <div className="set-date">
+          <CalCell nowMonth={nowMonth} selectDate={selectDate} onDateClick={onDateClick} allTasked={mainTask} detailClick={(allTask, date) => moveUrl("detail", allTask, date)} />
+          <div className='set-date'>
             <div>시작일 : {choiceFullList[0]}</div>
             <div>종료일 : {choiceFullList[1]}</div>
           </div>
-          <button className="next" onClick={() => moveUrl("add")}>
+          <button className='next' onClick={() => moveUrl("add")}>
             등록하기
           </button>
         </div>
-        <div className="friend">
+        <div className='friend'>
           <FriendList />
         </div>
       </div>

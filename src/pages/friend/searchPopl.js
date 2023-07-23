@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../assets/modal.scss";
+import "../../assets/searchPop.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -42,16 +42,34 @@ const SearchPop = (props) => {
 
     for (let i = 0; i < memberList.length; i++) {
       searchMemberList.push(
-        <div className="member" key={i}>
-          {memberList[i].nickname} //
-          <button onClick={() => moveHome(memberList[i].memberId)}>
-            {memberList[i].memberId}
+        <div className='member' key={i}>
+          <span>{memberList[i].nickname} </span>
+          <button className='go' onClick={() => moveHome(memberList[i].memberId)}>
+            바로가기
+          </button>
+          <button className='add' onClick={() => addFriend(memberList[i].memberId)}>
+            친구추가
           </button>
         </div>
       );
     }
 
-    return <div className="member-list">{searchMemberList} </div>;
+    return <div className='member-list'>{searchMemberList} </div>;
+  };
+
+  //친구 추가 api호출
+  const addFriend = (memberId) => {
+    axios
+      .post("/friends?friendId=" + memberId)
+      .then((res) => {
+        if (res.data.result === "suc") {
+          alert("성공하셨습니다.");
+        } else if (res.data.result === "err") {
+          alert("실패하셨습니다.");
+          return;
+        }
+      })
+      .catch((err) => console.log("catch :: " + err));
   };
 
   // 페이지 이동
@@ -69,22 +87,16 @@ const SearchPop = (props) => {
     return (
       <div className={"modal-bg"}>
         <div className={"modal-wrap"}>
-          <div className={"modal"}>
+          <div className={"friend-modal"}>
             <h1>친구찾기</h1>
-            <input
-              id="keyword"
-              type="text"
-              name="keyword"
-              placeholder="검색어"
-              value={keyword}
-              onChange={inputValue}
-            />
-            <button onClick={() => search()}> 검색</button>
-            <GetMemberList />
-
             <div className={"modal-content"}>
-              <button onClick={props.close}> 확인</button>
+              <input id='keyword' type='text' name='keyword' placeholder='검색어' value={keyword} onChange={inputValue} />
+              <button onClick={() => search()}> 검색</button>
+              <GetMemberList />
             </div>
+            <button className={"btn-confirm"} onClick={props.close}>
+              확인
+            </button>
           </div>
         </div>
       </div>

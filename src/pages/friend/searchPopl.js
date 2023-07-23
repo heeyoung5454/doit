@@ -37,18 +37,30 @@ const SearchPop = (props) => {
       .catch((err) => console.log("catch :: " + err));
   };
 
+  const getState = (state) => {
+    if (state === "FOLLOW") {
+      return "state-follow";
+    } else if (state === "BLOCK") {
+      return "state-block";
+    }
+  };
+
   const GetMemberList = () => {
     const searchMemberList = [];
 
     for (let i = 0; i < memberList.length; i++) {
       searchMemberList.push(
         <div className='member' key={i}>
-          <span>{memberList[i].nickname} </span>
+          <span className={getState(memberList[i].state)}>{memberList[i].nickname} </span>
           <button className='go' onClick={() => moveHome(memberList[i].memberId)}>
             바로가기
           </button>
           <button className='add' onClick={() => addFriend(memberList[i].memberId)}>
-            친구추가
+            추가
+          </button>
+
+          <button className='block' onClick={() => blockFriend(memberList[i].memberId)}>
+            차단
           </button>
         </div>
       );
@@ -72,6 +84,20 @@ const SearchPop = (props) => {
       .catch((err) => console.log("catch :: " + err));
   };
 
+  //친구 차단 api호출
+  const blockFriend = (friendId) => {
+    axios
+      .post("/friends/block?friendId=" + friendId)
+      .then((res) => {
+        if (res.data.result === "suc") {
+          alert("차단하였습니다.");
+        } else if (res.data.result === "err") {
+          alert("차단실패하셨습니다.");
+        }
+      })
+      .catch((err) => console.log("catch" + err));
+  };
+
   // 페이지 이동
   const pageMove = useNavigate();
 
@@ -90,8 +116,10 @@ const SearchPop = (props) => {
           <div className={"friend-modal"}>
             <h1>친구찾기</h1>
             <div className={"modal-content"}>
-              <input id='keyword' type='text' name='keyword' placeholder='검색어' value={keyword} onChange={inputValue} />
-              <button onClick={() => search()}> 검색</button>
+              <div className={"keyword-input"}>
+                <input id='keyword' type='text' name='keyword' placeholder='검색어' value={keyword} onChange={inputValue} />
+                <button onClick={() => search()}> 검색</button>
+              </div>
               <GetMemberList />
             </div>
             <button className={"btn-confirm"} onClick={props.close}>

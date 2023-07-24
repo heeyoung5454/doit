@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/header.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Alarm from "../pages/component/alarm";
 
 const Header = () => {
   // 로그인 성공시 페이지 이동
@@ -29,12 +30,44 @@ const Header = () => {
       });
   };
 
+  //*****알림 메세지 수싲********//
+  const [modalOpen, setModalOpen] = useState(false); // 알림팝업 호출
+  const [alarmList, setAlarmList] = useState([]); // 알림 메세지 리스트
+
+  useEffect(() => {
+    axios
+      .get("/alarm")
+      .then((res) => {
+        if (res.data.result === "suc") {
+          setAlarmList(res.data.data.friendAlarmList);
+        } else if (res.data.result === "err") {
+          alert("알림 수신 실패했습니다.");
+        }
+      })
+      .catch((err) => {
+        alert("catch:: " + JSON.stringify(err));
+      });
+  }, []);
+
+  const openModal = (e) => {
+    e.stopPropagation();
+    setModalOpen(true);
+  };
+
+  const closeModal = (e) => {
+    e.stopPropagation();
+    setModalOpen(false);
+  };
+
   return (
-    <div className="header-bar">
-      <div className="title">
+    <div className='header-bar' onClick={(e) => closeModal(e)}>
+      <div className='title'>
         <h2>scheduler</h2>
       </div>
-      <div className="logout" onClick={() => logOut()}>
+      <div className='alarm-icon' onClick={(e) => openModal(e)}></div>
+      <Alarm open={modalOpen} close={closeModal} pushList={alarmList} />
+
+      <div className='logout' onClick={() => logOut()}>
         로그아웃
       </div>
     </div>

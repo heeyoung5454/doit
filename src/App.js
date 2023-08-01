@@ -19,7 +19,11 @@ function App() {
         <Route path="/day" element={<Day />} />
         <Route path="/detail" element={<TaskDetail />} />
         <Route path="/taskUpdate" element={<TaskUpdate />} />
-        <Route path="/home:id" element={<Home />} />
+        <Route
+          path={`/home/:id/*`}
+          element={<Home />}
+          render={(props) => <Home {...props} />}
+        />
       </Routes>
     </div>
   );

@@ -1,0 +1,31 @@
+.home {
+  background-color: bisque;
+  .header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    // 친구추가
+    .add {
+      border-radius: 5px;
+      color: #fff6f4;
+      font-weight: 700;
+      background-color: #ffa41b;
+      padding: 10px 5px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    // 친구차단
+    .block {
+      border-radius: 5px;
+      color: #ffffff;
+      font-weight: 700;
+      background-color: #2e2e2e;
+      padding: 10px 5px;
+      min-width: 50px;
+      text-align: center;
+      margin-left: 5px;
+    }
+  }
+}

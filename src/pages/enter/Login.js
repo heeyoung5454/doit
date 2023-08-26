@@ -82,40 +82,26 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
+    <div className='login'>
       <Modal msg={modalMsg} open={modalOpen} close={closeModal} />
-      <div className="login-wrap">
-        <img src={imgLogin} alt="login" />
-        <h1>로그인</h1>
-        <div className="input-box">
-          <input
-            id="userId"
-            type="text"
-            name="userId"
-            placeholder="아이디"
-            value={userId}
-            onChange={inputValue}
-          />
-          <label htmlFor="userId">아이디</label>
+      <div className='login-wrap'>
+        <img src={imgLogin} alt='login' />
+        <h1>Login</h1>
+        <div className='input-box'>
+          <input id='userId' type='text' name='userId' placeholder='아이디' value={userId} onChange={inputValue} />
+          <label htmlFor='userId'>아이디</label>
         </div>
 
-        <div className="input-box">
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={inputValue}
-          />
-          <label htmlFor="password">비밀번호</label>
+        <div className='input-box'>
+          <input id='password' type='password' name='password' placeholder='비밀번호' value={password} onChange={inputValue} />
+          <label htmlFor='password'>비밀번호</label>
         </div>
 
         <button onClick={login}>로그인</button>
 
-        <div className="findAccount">아이디/비밀번호 찾기</div>
-        <div className="btn-join">
-          <Link to="/Join">회원가입</Link>
+        <div className='findAccount'>아이디/비밀번호 찾기</div>
+        <div className='btn-join'>
+          <Link to='/Join'>회원가입</Link>
         </div>
       </div>
     </div>

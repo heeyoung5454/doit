@@ -14,7 +14,7 @@ const Header = () => {
 
   const logOut = () => {
     axios
-      .post("/api/logout")
+      .post("/logout")
       .then((res) => {
         if (res.data.result === "suc") {
           alert("로그아웃 되었습니다.");
@@ -60,14 +60,14 @@ const Header = () => {
   };
 
   return (
-    <div className="header-bar" onClick={(e) => closeModal(e)}>
-      <div className="title">
+    <div className='header-bar' onClick={(e) => closeModal(e)}>
+      <div className='title'>
         <h2>scheduler</h2>
       </div>
-      <div className="alarm-icon" onClick={(e) => openModal(e)}></div>
+      <div className='alarm-icon' onClick={(e) => openModal(e)}></div>
       <Alarm open={modalOpen} close={closeModal} pushList={alarmList} />
 
-      <div className="logout" onClick={() => logOut()}>
+      <div className='logout' onClick={() => logOut()}>
         로그아웃
       </div>
     </div>

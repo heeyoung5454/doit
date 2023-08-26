@@ -47,7 +47,7 @@ const Join = () => {
     axios.defaults.withCredentials = true;
 
     axios
-      .post("http://localhost:8080/api/members/add", joinParams)
+      .post("/members/add", joinParams)
       .then((res) => {
         if (res.data.result === "suc") {
           openModal();
@@ -85,44 +85,23 @@ const Join = () => {
   const movePage = useNavigate();
 
   return (
-    <div className="join">
+    <div className='join'>
       <Modal msg={modalMsg} open={modalOpen} close={closeModal} />
       <h1> 회원가입</h1>
-      <div className="join-wrap">
-        <div className="input-box">
-          <label htmlFor="nickname">ID</label>
-          <input
-            id="nickname"
-            type="text"
-            name="nickname"
-            placeholder="아이디"
-            value={nickname}
-            onChange={inputValue}
-          />
+      <div className='join-wrap'>
+        <div className='input-box'>
+          <label htmlFor='nickname'>ID</label>
+          <input id='nickname' type='text' name='nickname' placeholder='아이디' value={nickname} onChange={inputValue} />
         </div>
 
-        <div className="input-box">
-          <label htmlFor="password">비밀번호</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={inputValue}
-          />
+        <div className='input-box'>
+          <label htmlFor='password'>비밀번호</label>
+          <input id='password' type='password' name='password' placeholder='비밀번호' value={password} onChange={inputValue} />
         </div>
 
-        <div className="input-box">
-          <label htmlFor="introduction">소개</label>
-          <input
-            id="introduction"
-            type="text"
-            name="introduction"
-            placeholder="소개"
-            value={introduction}
-            onChange={inputValue}
-          />
+        <div className='input-box'>
+          <label htmlFor='introduction'>소개</label>
+          <input id='introduction' type='text' name='introduction' placeholder='소개' value={introduction} onChange={inputValue} />
         </div>
 
         <button onClick={join}>회원가입</button>

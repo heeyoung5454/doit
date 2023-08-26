@@ -46,13 +46,9 @@ const TaskDetail = () => {
     if (detailTask.length === 0) {
       for (let i = 0; i < detailDate.length; i++) {
         detailTaskList.push(
-          <div key={detailDate[i]} className="task-schedule-list">
+          <div key={detailDate[i]} className='task-schedule-list'>
             <div>{detailDate[i]}</div>
-            <button
-              key={detailDate[i] + "insert"}
-              className="insert"
-              onClick={() => moveAddPage(detailDate[i])}
-            >
+            <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i])}>
               등록
             </button>
           </div>
@@ -66,43 +62,22 @@ const TaskDetail = () => {
         // 일정이 이미 등록된 경우
         if (detailDate[i] === detailTask[j].date) {
           detailTaskList.push(
-            <div className="detail-title">
+            <div className='detail-title'>
               <div>{detailDate[i]}</div>
-              <button
-                key={detailDate[i] + "insert"}
-                className="insert"
-                onClick={() => moveAddPage(detailDate[i], detailTask[j])}
-              >
+              <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i], detailTask[j])}>
                 수정
               </button>
             </div>
           );
           for (let k = 0; k < detailTask[j].taskSchedules.length; k++) {
             detailTaskList.push(
-              <div
-                key={
-                  detailTask[j].dailyScheduleId +
-                  "-" +
-                  detailTask[j].taskSchedules[k].taskScheduleId
-                }
-                className="task-schedule-list"
-              >
+              <div key={detailTask[j].dailyScheduleId + "-" + detailTask[j].taskSchedules[k].taskScheduleId} className='task-schedule-list'>
                 <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
                 <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
                 <div>완료여부 : {detailTask[j].taskSchedules[k].complete}</div>
                 <div>진행도 :{detailTask[j].taskSchedules[k].percent}</div>
-                <button
-                  className="complete"
-                  onClick={() =>
-                    completeTask(
-                      detailTask[j].taskSchedules[k].taskScheduleId,
-                      detailTask[j].taskSchedules[k].complete
-                    )
-                  }
-                >
-                  {detailTask[j].taskSchedules[k].complete === "N"
-                    ? "진행중"
-                    : "완료"}
+                <button className='complete' onClick={() => completeTask(detailTask[j].taskSchedules[k].taskScheduleId, detailTask[j].taskSchedules[k].complete)}>
+                  {detailTask[j].taskSchedules[k].complete === "N" ? "진행중" : "완료"}
                 </button>
               </div>
             );
@@ -114,13 +89,9 @@ const TaskDetail = () => {
             <div key={detailDate[i] + "-" + j}>
               <div>{detailDate[i]}</div>
 
-              <div className="task-schedule-list">
+              <div className='task-schedule-list'>
                 <div>등록된 일정이 없습니다</div>
-                <button
-                  key={detailDate[i] + "insert"}
-                  className="insert"
-                  onClick={() => moveAddPage(detailDate[i])}
-                >
+                <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i])}>
                   등록
                 </button>
               </div>
@@ -166,7 +137,7 @@ const TaskDetail = () => {
     return (
       <div>
         <h2> 일별 상세화면</h2>
-        <div className="content">{detailTaskList}</div>
+        <div className='content'>{detailTaskList}</div>
       </div>
     );
   };
@@ -174,7 +145,7 @@ const TaskDetail = () => {
   return (
     <div>
       <Header />
-      <div className="task-detail">{printDetail()}</div>
+      <div className='task-detail'>{printDetail()}</div>
     </div>
   );
 };

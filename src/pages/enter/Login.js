@@ -44,7 +44,7 @@ const Login = () => {
     };
 
     axios
-      .post("http://localhost:8080/api/login", loginParams)
+      .post("/login", loginParams)
       .then((res) => {
         if (res.data.result === "suc") {
           openModal();

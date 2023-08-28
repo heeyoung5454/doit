@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import http from "utile/http";
 import "../../assets/home.scss";
 
 //친구 추가 api호출
 const addFriend = (memberId) => {
-  axios
+  http
     .post("/friends?friendId=" + memberId)
     .then((res) => {
       if (res.data.result === "suc") {
@@ -19,7 +19,7 @@ const addFriend = (memberId) => {
 
 //친구 차단 api호출
 const blockFriend = (friendId) => {
-  axios
+  http
     .post("/friends/block?friendId=" + friendId)
     .then((res) => {
       if (res.data.result === "suc") {
@@ -37,14 +37,14 @@ const Home = () => {
   let nickname = location.state.nickname;
 
   return (
-    <div className="home">
-      <div className="header">
+    <div className='home'>
+      <div className='header'>
         <div>{nickname}</div>
-        <div className="add" onClick={() => addFriend(memberId)}>
+        <div className='add' onClick={() => addFriend(memberId)}>
           추가
         </div>
 
-        <div className="block" onClick={() => blockFriend(memberId)}>
+        <div className='block' onClick={() => blockFriend(memberId)}>
           차단
         </div>
       </div>

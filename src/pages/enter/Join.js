@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import http from "utile/http";
 import "../../assets/join.scss";
 import Modal from "../component/modal";
 import { useNavigate } from "react-router-dom";
@@ -44,9 +44,9 @@ const Join = () => {
       introduction: introduction,
     };
 
-    axios.defaults.withCredentials = true;
+    //axios.defaults.withCredentials = true;
 
-    axios
+    http
       .post("/members/add", joinParams)
       .then((res) => {
         if (res.data.result === "suc") {

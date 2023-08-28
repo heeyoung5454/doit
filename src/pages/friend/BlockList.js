@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../../assets/blockList.scss";
-import axios from "axios";
+import http from "utile/http";
 
 const BlockList = (props) => {
   const [blockList, setBlockList] = useState([]);
 
   useEffect(() => {
     // 차단 목록 api호출
-    axios
+    http
       .get("/friends/block")
       .then((res) => {
         if (res.data.result === "suc") {
@@ -32,7 +32,7 @@ const BlockList = (props) => {
 
   if (props.open) {
     return (
-      <div className="block-list">
+      <div className='block-list'>
         <ul>
           <PrintBlock />
         </ul>

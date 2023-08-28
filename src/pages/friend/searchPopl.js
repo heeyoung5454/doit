@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../assets/searchPop.scss";
-import axios from "axios";
+import http from "utile/http";
 import { useNavigate } from "react-router-dom";
 
 const SearchPop = (props) => {
@@ -24,7 +24,7 @@ const SearchPop = (props) => {
   };
 
   const search = () => {
-    axios
+    http
       .get("/members?condition=" + keyword)
       .then((res) => {
         if (res.data.result === "suc") {
@@ -50,23 +50,16 @@ const SearchPop = (props) => {
 
     for (let i = 0; i < memberList.length; i++) {
       searchMemberList.push(
-        <div className="member" key={i}>
-          <span className={getState(memberList[i].state)}>
-            {memberList[i].nickname}{" "}
-          </span>
-          <button
-            className="go"
-            onClick={() =>
-              moveHome(memberList[i].memberId, memberList[i].nickname)
-            }
-          >
+        <div className='member' key={i}>
+          <span className={getState(memberList[i].state)}>{memberList[i].nickname} </span>
+          <button className='go' onClick={() => moveHome(memberList[i].memberId, memberList[i].nickname)}>
             바로가기
           </button>
         </div>
       );
     }
 
-    return <div className="member-list">{searchMemberList} </div>;
+    return <div className='member-list'>{searchMemberList} </div>;
   };
 
   // 페이지 이동
@@ -89,14 +82,7 @@ const SearchPop = (props) => {
             <h1>친구찾기</h1>
             <div className={"modal-content"}>
               <div className={"keyword-input"}>
-                <input
-                  id="keyword"
-                  type="text"
-                  name="keyword"
-                  placeholder="검색어"
-                  value={keyword}
-                  onChange={inputValue}
-                />
+                <input id='keyword' type='text' name='keyword' placeholder='검색어' value={keyword} onChange={inputValue} />
                 <button onClick={() => search()}> 검색</button>
               </div>
               <GetMemberList />

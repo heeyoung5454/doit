@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import http from "utile/http";
 import "../../assets/taskUpdate.scss";
 import Header from "../../layout/header";
 
@@ -119,7 +119,7 @@ const TaskUpdate = () => {
       taskScheduleFormList: dayTaskList,
     };
 
-    axios
+    http
       .post("/daily-schedule/task", dayTaskParams)
       .then((res) => {
         if (res.data.result === "suc") {
@@ -169,7 +169,7 @@ const TaskUpdate = () => {
 
     let dailyScheduleId = detailTaskItem.dailyScheduleId;
 
-    axios
+    http
       .post(`/task-schedule/${dailyScheduleId}`, dayTaskParams)
       .then((res) => {
         if (res.data.result === "suc") {

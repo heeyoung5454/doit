@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import http from "utile/http";
 import "../../assets/login.scss";
 import Modal from "../component/modal";
 
@@ -43,7 +43,7 @@ const Login = () => {
       password: password,
     };
 
-    axios
+    http
       .post("/login", loginParams)
       .then((res) => {
         if (res.data.result === "suc") {

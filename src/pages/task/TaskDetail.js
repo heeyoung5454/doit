@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import http from "utile/http";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../assets/detail.scss";
 import Header from "../../layout/header";
@@ -25,7 +25,7 @@ const TaskDetail = () => {
   // useEffect -> 화면 렌더링 되기 전 실행
   useEffect(() => {
     // 메인 스케줄의 일별 과제 스케줄 조회
-    axios
+    http
       .get(`/api/daily-task-schedule/${mainScheduleId}`)
       .then((res) => {
         if (res.data.result === "suc") {
@@ -122,7 +122,7 @@ const TaskDetail = () => {
         complete = "N";
       }
 
-      axios
+      http
         .patch(`/api/${taskId}/${complete}`)
         .then((res) => {
           if (res.data.result === "suc") {

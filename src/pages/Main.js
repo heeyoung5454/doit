@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
-import axios from "axios";
+import http from "utile/http";
 import Header from "../layout/header";
 import SearchPop from "../pages/friend/searchPopl";
 import BlockList from "./friend/BlockList";
@@ -106,7 +106,7 @@ const FriendList = () => {
 
   // 친구 목록 불러오기 :: 화면 랜더링 전에 실행
   useEffect(() => {
-    axios
+    http
       .get("/friends")
       .then((res) => {
         if (res.data.result === "suc") {
@@ -145,7 +145,7 @@ const FriendList = () => {
 
   // 팔로우 취소
   const followCancel = (friendId) => {
-    axios
+    http
       .post("/friends/cancel?friendId=" + friendId)
       .then((res) => {
         if (res.data.result === "suc") {
@@ -221,7 +221,7 @@ const Main = () => {
     let paramsMonth = format(nowMonth, "MM");
 
     // 메인 스케줄 조회
-    axios
+    http
       .get(`/main-schedule/${paramsYear}/${paramsMonth}`)
       .then((res) => {
         if (res.data.result === "suc") {
@@ -296,11 +296,9 @@ const Main = () => {
         endDate: choiceFullList[1],
       };
 
-      axios
+      http
         .post("/main-schedule", insertParams)
         .then((res) => {
-          console.log(axios.defaults.headers.common, "test");
-          console.log(JSON.stringify(res.data.result));
           if (res.data.result === "suc") {
             alert("스케줄 등록에 성공하셨습니다.");
 

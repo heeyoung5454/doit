@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/header.scss";
-import axios from "axios";
+import http from "utile/http";
 import { useNavigate } from "react-router-dom";
 import Alarm from "../pages/component/alarm";
 
@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   const logOut = () => {
-    axios
+    http
       .post("/logout")
       .then((res) => {
         if (res.data.result === "suc") {
@@ -35,7 +35,7 @@ const Header = () => {
   const [alarmList, setAlarmList] = useState([]); // 알림 메세지 리스트
 
   useEffect(() => {
-    axios
+    http
       .get("/alarm")
       .then((res) => {
         if (res.data.result === "suc") {

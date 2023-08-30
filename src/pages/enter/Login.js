@@ -50,6 +50,8 @@ const Login = () => {
           openModal();
           changeModalMsg("로그인에 성공했습니다.");
           changeMoveUrl("/main");
+          // 로컬스토리지에 저장
+          localStorage.setItem("token", res.data.data.accessToken);
         } else if (res.data.result === "err") {
           openModal();
           changeModalMsg("로그인에 실패했습니다");

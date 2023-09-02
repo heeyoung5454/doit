@@ -43,6 +43,10 @@ const Login = () => {
       password: password,
     };
 
+    if (localStorage.getItem("token")) {
+      localStorage.removeItem("token");
+    }
+
     http
       .post("/login", loginParams)
       .then((res) => {

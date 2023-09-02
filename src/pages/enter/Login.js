@@ -43,8 +43,8 @@ const Login = () => {
       password: password,
     };
 
-    if (localStorage.getItem("token")) {
-      localStorage.removeItem("token");
+    if (localStorage.getItem("accessToken")) {
+      localStorage.removeItem("accessToken");
     }
 
     http
@@ -55,7 +55,7 @@ const Login = () => {
           changeModalMsg("로그인에 성공했습니다.");
           changeMoveUrl("/main");
           // 로컬스토리지에 저장
-          localStorage.setItem("token", res.data.data.accessToken);
+          localStorage.setItem("accessToken", res.data.data.accessToken);
         } else if (res.data.result === "err") {
           openModal();
           changeModalMsg("로그인에 실패했습니다");

@@ -1,8 +1,8 @@
 import axios from "axios";
 
-let token = null;
-if (localStorage.getItem("token")) {
-  token = localStorage.getItem("token");
+let token = "";
+if (localStorage.getItem("accessToken")) {
+  token = localStorage.getItem("accessToken");
 }
 
 let http = "";

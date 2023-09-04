@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import http from "utile/http";
 import "../../assets/login.scss";
@@ -7,6 +7,14 @@ import Modal from "../component/modal";
 import imgLogin from "../../assets/images/icon/user.png";
 
 const Login = () => {
+  useEffect(() => {
+    //토큰 존재하면 메인페이지 이동
+
+    if (localStorage.getItem("token")) {
+      changeMoveUrl("/main");
+    }
+  }, []);
+
   const [inputs, setInputs] = useState({
     userId: "",
     password: "",
@@ -42,11 +50,6 @@ const Login = () => {
       nickname: userId,
       password: password,
     };
-
-    // 로그인 시, 이전 토큰은 지우기
-    if (localStorage.getItem("token")) {
-      localStorage.removeItem("token");
-    }
 
     http
       .post("/login", loginParams)

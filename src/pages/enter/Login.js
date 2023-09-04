@@ -43,6 +43,11 @@ const Login = () => {
       password: password,
     };
 
+    // 로그인 시, 이전 토큰은 지우기
+    if (localStorage.getItem("token")) {
+      localStorage.removeItem("token");
+    }
+
     http
       .post("/login", loginParams)
       .then((res) => {

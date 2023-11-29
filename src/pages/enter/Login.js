@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { noTokenHttp } from "utile/http";
 import "../../assets/login.scss";
 import Modal from "../component/modal";
@@ -61,11 +61,13 @@ const Login = () => {
           changeModalMsg("로그인에 실패했습니다");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log("catch" + err);
+      });
   };
 
   // 로그인 성공시 페이지 이동
-  const movePage = useNavigate();
+  //  const movePage = useNavigate();
 
   // 모달창 제어
   const [modalOpen, setModalOpen] = useState(false); // 팝업 호출
@@ -80,7 +82,8 @@ const Login = () => {
   };
 
   const changeMoveUrl = (pageUrl) => {
-    movePage(pageUrl); // 페이지 이동
+    window.location.replace(pageUrl);
+    //movePage(pageUrl); // 페이지 이동
   };
 
   const changeModalMsg = (msg) => {
@@ -88,40 +91,26 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
+    <div className='login'>
       <Modal msg={modalMsg} open={modalOpen} close={closeModal} />
-      <div className="login-wrap">
-        <img src={imgLogin} alt="login" />
+      <div className='login-wrap'>
+        <img src={imgLogin} alt='login' />
         <h1>Login</h1>
-        <div className="input-box">
-          <input
-            id="userId"
-            type="text"
-            name="userId"
-            placeholder="아이디"
-            value={userId}
-            onChange={inputValue}
-          />
-          <label htmlFor="userId">아이디</label>
+        <div className='input-box'>
+          <input id='userId' type='text' name='userId' placeholder='아이디' value={userId} onChange={inputValue} />
+          <label htmlFor='userId'>아이디</label>
         </div>
 
-        <div className="input-box">
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={inputValue}
-          />
-          <label htmlFor="password">비밀번호</label>
+        <div className='input-box'>
+          <input id='password' type='password' name='password' placeholder='비밀번호' value={password} onChange={inputValue} />
+          <label htmlFor='password'>비밀번호</label>
         </div>
 
         <button onClick={login}>로그인</button>
 
-        <div className="findAccount">아이디/비밀번호 찾기</div>
-        <div className="btn-join">
-          <Link to="/Join">회원가입</Link>
+        <div className='findAccount'>아이디/비밀번호 찾기</div>
+        <div className='btn-join'>
+          <Link to='/Join'>회원가입</Link>
         </div>
       </div>
     </div>

@@ -154,7 +154,10 @@ const FriendList = () => {
           alert("팔로우를 취소 실패하셨습니다.");
         }
       })
-      .catch((err) => console.log("catch" + err));
+      .catch((err) => console.log("catch" + err))
+      .finally(() => {
+        window.location.replace("/main");
+      });
   };
 
   const getFollowingList = [];
@@ -183,7 +186,9 @@ const FriendList = () => {
     <div className='friend-list'>
       <div>
         <h2>친구 목록</h2>
-        <div onClick={() => openBlockList()}>차단리스트</div>
+        <button className='block-btn' onClick={() => openBlockList()}>
+          차단 목록
+        </button>
 
         <div className='follow-back'>
           <h3>맞팔친구</h3>

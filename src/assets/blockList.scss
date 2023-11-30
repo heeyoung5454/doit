@@ -1,10 +1,30 @@
 .block-list {
   position: fixed;
-  top: 95px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  top: 9.5rem;
   right: 0;
   width: 300px;
-  height: calc(100vh - 150px);
+  height: 25rem;
+  overflow-y: scroll;
   background-color: #f5f6f9;
   border-radius: 20px;
   padding: 20px 30px;
+  border: 0.1rem solid orangered;
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  ul {
+    li {
+      padding: 1.5rem 0;
+    }
+  }
 }

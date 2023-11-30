@@ -23,19 +23,26 @@ const BlockList = (props) => {
   const PrintBlock = () => {
     let userBlockList = [];
 
+    if (blockList.length === 0) {
+      userBlockList.push("차단 목록이 없습니다.");
+
+      return userBlockList;
+    }
+
     for (let i = 0; i < blockList.length; i++) {
       userBlockList.push(<li key={i}> {blockList[i].nickname}</li>);
     }
 
-    return userBlockList;
+    return <ul>{userBlockList}</ul>;
   };
 
   if (props.open) {
     return (
       <div className='block-list'>
-        <ul>
-          <PrintBlock />
-        </ul>
+        <div className='close btn' onClick={props.close}>
+          X
+        </div>
+        <PrintBlock />
       </div>
     );
   }

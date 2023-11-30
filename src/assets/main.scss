@@ -170,6 +170,14 @@
         margin-bottom: 30px;
       }
 
+      // 차단 버튼
+      .block-btn {
+        background-color: red;
+        position: absolute;
+        top: 1rem;
+        right: 0;
+      }
+
       // 맞팔 목록
       .follow-back {
         padding: 30px;

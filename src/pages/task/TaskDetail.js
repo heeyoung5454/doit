@@ -26,7 +26,7 @@ const TaskDetail = () => {
   useEffect(() => {
     // 메인 스케줄의 일별 과제 스케줄 조회
     http
-      .get(`/api/daily-task-schedule/${mainScheduleId}`)
+      .get(`/daily-task-schedule/${mainScheduleId}`)
       .then((res) => {
         if (res.data.result === "suc") {
           getDailyTasks(res.data.data.dailyTaskScheduleList);
@@ -123,7 +123,7 @@ const TaskDetail = () => {
       }
 
       http
-        .patch(`/api/${taskId}/${complete}`)
+        .patch(`/${taskId}/${complete}`)
         .then((res) => {
           if (res.data.result === "suc") {
             alert("성공");

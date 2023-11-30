@@ -7,7 +7,6 @@ const Alarm = (props) => {
     const GetDataList = () => {
       let pushList = [];
       let dataList = props.pushList;
-      console.log(dataList);
 
       if (dataList.length > 0) {
         for (let i = 0; i < dataList.length; i++) {

@@ -28,7 +28,11 @@ const blockFriend = (friendId) => {
         alert("차단실패하셨습니다.");
       }
     })
-    .catch((err) => console.log("catch" + err));
+    .catch((err) => console.log("catch" + err))
+    .finally(() => {
+      // 차단 후 페이지 이동
+      window.location.replace("/main");
+    });
 };
 
 const Home = () => {

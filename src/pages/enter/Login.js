@@ -66,9 +66,6 @@ const Login = () => {
       });
   };
 
-  // 로그인 성공시 페이지 이동
-  //  const movePage = useNavigate();
-
   // 모달창 제어
   const [modalOpen, setModalOpen] = useState(false); // 팝업 호출
   const [modalMsg, setModalMsg] = useState(""); // 팝업 메세지
@@ -83,7 +80,6 @@ const Login = () => {
 
   const changeMoveUrl = (pageUrl) => {
     window.location.replace(pageUrl);
-    //movePage(pageUrl); // 페이지 이동
   };
 
   const changeModalMsg = (msg) => {

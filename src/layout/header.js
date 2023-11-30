@@ -60,14 +60,17 @@ const Header = () => {
   };
 
   return (
-    <div className="header-bar" onClick={(e) => closeModal(e)}>
-      <div className="title">
+    <div className='header-bar' onClick={(e) => closeModal(e)}>
+      <div className='title'>
         <h2>scheduler</h2>
       </div>
-      <div className="alarm-icon" onClick={(e) => openModal(e)}></div>
       <Alarm open={modalOpen} close={closeModal} pushList={alarmList} />
 
-      <div className="logout" onClick={() => logOut()}>
+      <div className='alarm-icon' onClick={(e) => openModal(e)}>
+        {alarmList.length > 0 ? "(" + alarmList.length + ")" : ""}
+      </div>
+
+      <div className='logout' onClick={() => logOut()}>
         로그아웃
       </div>
     </div>

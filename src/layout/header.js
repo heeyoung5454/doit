@@ -9,6 +9,8 @@ const Header = () => {
   const movePage = useNavigate();
 
   const afterLogout = () => {
+    localStorage.removeItem("accessToken");
+
     movePage("/");
   };
 
@@ -60,17 +62,17 @@ const Header = () => {
   };
 
   return (
-    <div className='header-bar' onClick={(e) => closeModal(e)}>
-      <div className='title'>
-        <h2>scheduler</h2>
+    <div className="header-bar" onClick={(e) => closeModal(e)}>
+      <div className="title">
+        <h2 onClick={() => movePage("/main")}>scheduler</h2>
       </div>
       <Alarm open={modalOpen} close={closeModal} pushList={alarmList} />
 
-      <div className='alarm-icon' onClick={(e) => openModal(e)}>
+      <div className="alarm-icon" onClick={(e) => openModal(e)}>
         {alarmList.length > 0 ? "(" + alarmList.length + ")" : ""}
       </div>
 
-      <div className='logout' onClick={() => logOut()}>
+      <div className="logout" onClick={() => logOut()}>
         로그아웃
       </div>
     </div>

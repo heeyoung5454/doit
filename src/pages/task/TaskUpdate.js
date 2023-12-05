@@ -68,14 +68,46 @@ const TaskUpdate = () => {
 
     for (let j = 0; j < dayTaskList.length; j++) {
       dayPrint.push(
-        <div key={"input" + dayTaskList + "-" + j} className='day'>
-          <input className='title' id={"title-" + j} type='text' value={dayTaskList[j].title || ""} placeholder='제목' onChange={(e) => inputTask({ e, j }, 0)} />
-          <input className='content' id={"content-" + j} type='text' value={dayTaskList[j].content || ""} placeholder='내용' onChange={(e) => inputTask({ e, j }, 1)} />
-          <input className='priority' id={"priority-" + j} type='text' value={dayTaskList[j].priority || ""} placeholder='우선순위' onChange={(e) => inputTask({ e, j }, 2)} />
-          <div className='up' onClick={(e) => inputTask({ e, j }, 2, "up")}></div>
-          <div className='down' onClick={(e) => inputTask({ e, j }, 2, "down")}></div>
+        <div key={"input" + dayTaskList + "-" + j} className="day">
+          <input
+            className="title"
+            id={"title-" + j}
+            type="text"
+            value={dayTaskList[j].title || ""}
+            placeholder="제목"
+            onChange={(e) => inputTask({ e, j }, 0)}
+          />
+          <input
+            className="content"
+            id={"content-" + j}
+            type="text"
+            value={dayTaskList[j].content || ""}
+            placeholder="내용"
+            onChange={(e) => inputTask({ e, j }, 1)}
+          />
+          <input
+            className="priority"
+            id={"priority-" + j}
+            type="text"
+            value={dayTaskList[j].priority || ""}
+            placeholder="우선순위"
+            onChange={(e) => inputTask({ e, j }, 2)}
+          />
+          <div
+            className="up"
+            onClick={(e) => inputTask({ e, j }, 2, "up")}
+          ></div>
+          <div
+            className="down"
+            onClick={(e) => inputTask({ e, j }, 2, "down")}
+          ></div>
           {detailTaskItem ? (
-            <button className='delete' onClick={(e) => deleteTask({ e, j }, dayTaskList[j].taskScheduleId)}>
+            <button
+              className="delete"
+              onClick={(e) =>
+                deleteTask({ e, j }, dayTaskList[j].taskScheduleId)
+              }
+            >
               삭제
             </button>
           ) : (
@@ -86,8 +118,8 @@ const TaskUpdate = () => {
     }
 
     dayPrint.push(
-      <div key={date} className='day-group'>
-        <button key={"btn-add"} className='add' onClick={(e) => addTask({ e })}>
+      <div key={date} className="day-group">
+        <button key={"btn-add"} className="add" onClick={(e) => addTask({ e })}>
           추가
         </button>
       </div>
@@ -107,7 +139,11 @@ const TaskUpdate = () => {
   // 일별 일정등록 (API 호출)
   const dailyInsert = () => {
     for (let i = 0; i < dayTaskList.length; i++) {
-      if (!dayTaskList[i].title || !dayTaskList[i].content || !dayTaskList[i].priority) {
+      if (
+        !dayTaskList[i].title ||
+        !dayTaskList[i].content ||
+        !dayTaskList[i].priority
+      ) {
         alert("필수값을 입력해주세요");
         return;
       }
@@ -139,7 +175,11 @@ const TaskUpdate = () => {
   // 일별 일정수정 (API 호출)
   const dailyUpdate = () => {
     for (let i = 0; i < dayTaskList.length; i++) {
-      if (!dayTaskList[i].title || !dayTaskList[i].content || !dayTaskList[i].priority) {
+      if (
+        !dayTaskList[i].title ||
+        !dayTaskList[i].content ||
+        !dayTaskList[i].priority
+      ) {
         alert("필수값을 입력해주세요");
         return;
       }
@@ -189,25 +229,22 @@ const TaskUpdate = () => {
   return (
     <div>
       <Header />
-      <div className='taskAdd'>
-        <div className='inner'>
-          {JSON.stringify(dayTaskList)}
+      <div className="taskAdd">
+        <div className="inner">
           <div>{date}</div>
-          <div className='dayList'>{printDayList()}</div>
+          <div className="dayList">{printDayList()}</div>
 
           {detailTaskItem ? (
-            <button className='update' onClick={(taskList) => dailyUpdate()}>
+            <button className="update" onClick={(taskList) => dailyUpdate()}>
               수정
             </button>
           ) : (
-            <button className='insert' onClick={(taskList) => dailyInsert()}>
+            <button className="insert" onClick={(taskList) => dailyInsert()}>
               등록
             </button>
           )}
 
           <hr />
-          <dv>{JSON.stringify(detailTaskItem)}</dv>
-          <div>{JSON.stringify(delTaskList)}</div>
         </div>
       </div>
     </div>

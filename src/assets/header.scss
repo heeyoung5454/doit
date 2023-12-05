@@ -8,6 +8,9 @@
   align-items: center;
   .title {
     font-size: 35px;
+    h2 {
+      cursor: pointer;
+    }
   }
 
   // 알람 아이콘

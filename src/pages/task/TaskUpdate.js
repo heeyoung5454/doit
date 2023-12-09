@@ -101,18 +101,13 @@ const TaskUpdate = () => {
             className="down"
             onClick={(e) => inputTask({ e, j }, 2, "down")}
           ></div>
-          {detailTaskItem ? (
-            <button
-              className="delete"
-              onClick={(e) =>
-                deleteTask({ e, j }, dayTaskList[j].taskScheduleId)
-              }
-            >
-              삭제
-            </button>
-          ) : (
-            ""
-          )}
+
+          <button
+            className="delete"
+            onClick={(e) => deleteTask({ e, j }, dayTaskList[j].taskScheduleId)}
+          >
+            삭제
+          </button>
         </div>
       );
     }
@@ -147,6 +142,11 @@ const TaskUpdate = () => {
         alert("필수값을 입력해주세요");
         return;
       }
+    }
+
+    if (!dayTaskList || dayTaskList.length === 0) {
+      alert("최소 1개 이상의 일정을 등록해주세요");
+      return;
     }
 
     let dayTaskParams = {

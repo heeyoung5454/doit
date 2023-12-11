@@ -123,12 +123,13 @@ const TaskDetail = () => {
       }
 
       http
-        .patch(`/${taskId}/${complete}`)
+        .patch(`task-schedule/${taskId}/${complete}`)
         .then((res) => {
           if (res.data.result === "suc") {
             alert("성공");
+            window.location.reload();
           } else if (res.data.result === "err") {
-            alert("스케줄 조회에 실패하셨습니다.");
+            alert("통신에러 발생했습니다");
           }
         })
         .catch((err) => console.log("catch" + err));

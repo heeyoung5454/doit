@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import {
-  format,
-  addMonths,
-  subMonths,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-} from "date-fns";
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import http from "utile/http";
@@ -21,20 +13,18 @@ import BlockList from "./friend/BlockList";
 
 const CalHeader = ({ nowMonth, prevMonth, nextMonth }) => {
   return (
-    <div className="header">
-      <div className="title">
-        <span className="month">
+    <div className='header'>
+      <div className='title'>
+        <span className='month'>
           {format(nowMonth, "M")}
-          <span className="eng">
-            {nowMonth.toLocaleString("en-US", { month: "long" })}
-          </span>
+          <span className='eng'>{nowMonth.toLocaleString("en-US", { month: "long" })}</span>
         </span>
 
-        <span className="year">{format(nowMonth, "yyyy")}</span>
+        <span className='year'>{format(nowMonth, "yyyy")}</span>
       </div>
-      <div className="arrow">
-        <Icon icon="bi:arrow-left-circle-fill" onClick={prevMonth} />
-        <Icon icon="bi:arrow-right-circle-fill" onClick={nextMonth} />
+      <div className='arrow'>
+        <Icon icon='bi:arrow-left-circle-fill' onClick={prevMonth} />
+        <Icon icon='bi:arrow-right-circle-fill' onClick={nextMonth} />
       </div>
     </div>
   );
@@ -46,26 +36,21 @@ const CalDays = () => {
 
   for (let i = 0; i < 7; i++) {
     days.push(
-      <div className="week" key={i}>
+      <div className='week' key={i}>
         {date[i]}
       </div>
     );
   }
 
-  return <div className="day row">{days}</div>;
+  return <div className='day row'>{days}</div>;
 };
 
 const getMainScheduleId = (allTasked, nowDate) => {
   for (let i = 0; i < allTasked.length; i++) {
-    let stDate = new Date(
-      new Date(allTasked[i].startDate).setHours(0, 0, 0, 0)
-    );
+    let stDate = new Date(new Date(allTasked[i].startDate).setHours(0, 0, 0, 0));
     let endDate = new Date(new Date(allTasked[i].endDate).setHours(0, 0, 0, 0));
 
-    if (
-      nowDate.getTime() >= stDate.getTime() &&
-      nowDate.getTime() <= endDate.getTime()
-    ) {
+    if (nowDate.getTime() >= stDate.getTime() && nowDate.getTime() <= endDate.getTime()) {
       return allTasked[i].mainScheduleId;
     }
   }
@@ -73,17 +58,13 @@ const getMainScheduleId = (allTasked, nowDate) => {
   return false;
 };
 
-const CalCell = ({
-  nowMonth,
-  selectDate,
-  onDateClick,
-  allTasked,
-  detailClick,
-}) => {
+const CalCell = ({ nowMonth, selectDate, onDateClick, choiceFullList, drag, allTasked, detailClick }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
   const endDate = endOfWeek(monthEnd);
+
+  const [title, setTitle] = useState("새로운 이벤트"); // 스케줄 제목
 
   const rows = [];
   let days = [];
@@ -95,34 +76,31 @@ const CalCell = ({
       formattedDate = format(day, "d");
       // day를 직접적으로 사용하면 무한루프 돌기 때문에 지역변수로 선언하여 사용
       const cloneDay = day;
+      const compareDay = new Date(choiceFullList[0]);
+
+      console.log(choiceFullList, formattedDate);
 
       days.push(
         <div
-          className={`cell ${
-            !isSameMonth(day, monthStart)
-              ? "disabled"
-              : isSameDay(day, selectDate)
-              ? "selected"
-              : format(nowMonth, "M") !== format(day, "M")
-              ? "not-valid"
-              : "valid"
-          }`}
+          className={`cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectDate) ? "selected" : format(nowMonth, "M") !== format(day, "M") ? "not-valid" : "valid"}`}
           key={day}
-          onClick={() => onDateClick(cloneDay)}
+          // onClick={() => onDateClick(cloneDay)}
+          // onDoubleClick={() => onDouble(cloneDay)}
+          onMouseDown={() => drag(cloneDay, "start")}
+          onMouseUp={() => drag(cloneDay, "end")}
         >
-          <span
-            className={
-              format(nowMonth, "M") !== format(day, "M")
-                ? "not-vaild daily"
-                : "daily"
-            }
-          >
-            {formattedDate}
-          </span>
-          <span
-            className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""}
-            onClick={() => detailClick(allTasked, cloneDay)}
-          ></span>
+          {compareDay.getDate() === formattedDate && isSameMonth(day, compareDay) && (
+            <div className='box'>
+              <div>
+                <input id='title' type='text' name='title' placeholder='새로운 이벤트' value={title} onChange={(e) => setTitle(e.target.value)} />
+              </div>
+              <div>
+                {format(day, "Y").toString()}.{format(day, "M").toString()}.{formattedDate}
+              </div>
+            </div>
+          )}
+          <span className={format(nowMonth, "M") !== format(day, "M") ? "not-vaild daily" : "daily"}>{formattedDate}</span>
+          <span className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""} onClick={() => detailClick(allTasked, cloneDay)}></span>
         </div>
       );
 
@@ -130,13 +108,14 @@ const CalCell = ({
     }
 
     rows.push(
-      <div className="row" key={day}>
+      <div className='row' key={day}>
         {days}
       </div>
     );
     days = [];
   }
-  return <div className="body">{rows} </div>;
+
+  return <div className='body'>{rows}</div>;
 };
 
 // 친구 목록
@@ -205,12 +184,9 @@ const FriendList = () => {
 
   for (let i = 0; i < followingList.length; i++) {
     getFollowingList.push(
-      <div className="friend-item" key={i}>
+      <div className='friend-item' key={i}>
         <span>{followingList[i].nickname}</span>
-        <button
-          className="cancel"
-          onClick={() => followCancel(followingList[i].friendId)}
-        >
+        <button className='cancel' onClick={() => followCancel(followingList[i].friendId)}>
           팔로잉 취소
         </button>
       </div>
@@ -219,26 +195,26 @@ const FriendList = () => {
 
   for (let j = 0; j < followBackList.length; j++) {
     getFollowBackList.push(
-      <div className="friend-item" key={j}>
+      <div className='friend-item' key={j}>
         <span>{followBackList[j].nickname}</span>
       </div>
     );
   }
 
   return (
-    <div className="friend-list">
+    <div className='friend-list'>
       <div>
         <h2>친구 목록</h2>
-        <button className="block-btn" onClick={() => openBlockList()}>
+        <button className='block-btn' onClick={() => openBlockList()}>
           차단 목록
         </button>
 
-        <div className="follow-back">
+        <div className='follow-back'>
           <h3>맞팔친구</h3>
           <div>{getFollowBackList}</div>
         </div>
 
-        <div className="follow-ing">
+        <div className='follow-ing'>
           <h3>팔로잉친구</h3>
           <div>{getFollowingList}</div>
         </div>
@@ -247,7 +223,7 @@ const FriendList = () => {
       <BlockList open={isBlockOpen} close={closeBlockList} />
       <SearchPop open={modalOpen} close={closeModal} />
 
-      <button className="search" onClick={() => openModal()}>
+      <button className='search' onClick={() => openModal()}>
         친구 찾기
       </button>
     </div>
@@ -292,6 +268,44 @@ const Main = () => {
     setNowMonth(addMonths(nowMonth, 1));
   };
 
+  const drag = (day, type) => {
+    let convertDay = new Date(day);
+
+    let month = convertDay.getMonth() + 1;
+    let date = convertDay.getDate();
+
+    if (month < 10) {
+      month = "0" + month;
+    }
+
+    if (date < 10) {
+      date = "0" + date;
+    }
+
+    let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
+
+    if (type === "start") {
+      if (choiceFullList.length === 0) {
+        setChoiceFullList([...choiceFullList, fullDate]);
+      } else {
+        setChoiceFullList([fullDate, choiceFullList[0]]);
+      }
+
+      return;
+    }
+
+    if (type === "end") {
+      // 한개 날짜가 지정되어있을 경우, 비교해서 넣기
+      if (new Date(fullDate) > new Date(choiceFullList[0])) {
+        setChoiceFullList([choiceFullList[0], fullDate]);
+      } else {
+        setChoiceFullList([fullDate, choiceFullList[0]]);
+      }
+
+      return;
+    }
+  };
+
   const onDateClick = (day) => {
     let convertDay = new Date(day);
 
@@ -308,8 +322,7 @@ const Main = () => {
       date = "0" + date;
     }
 
-    let fullDate =
-      convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
+    let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
 
     // 현재 있는 choiceFullList가 1개이하라면 그냥 푸시
     if (choiceFullList.length <= 2) {
@@ -334,6 +347,12 @@ const Main = () => {
   const pageMove = useNavigate();
 
   const moveUrl = (type, allTask, date) => {
+    console.log(choiceFullList[0], choiceFullList[1]);
+
+    if (true) {
+      return;
+    }
+
     if (type === "add") {
       if (choiceFullList.length < 2 || choiceFullList == null) {
         alert("날짜를 선택해주세요");
@@ -380,30 +399,28 @@ const Main = () => {
   return (
     <div>
       <Header />
-      <div className="main">
-        <div className="calendar">
-          <CalHeader
-            nowMonth={nowMonth}
-            prevMonth={prevMonth}
-            nextMonth={nextMonth}
-          />
+      <div className='main'>
+        <div className='calendar'>
+          <CalHeader nowMonth={nowMonth} prevMonth={prevMonth} nextMonth={nextMonth} />
           <CalDays />
           <CalCell
             nowMonth={nowMonth}
             selectDate={selectDate}
             onDateClick={onDateClick}
+            choiceFullList={choiceFullList}
             allTasked={mainTask}
+            drag={drag}
             detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
           />
-          <div className="set-date">
+          <div className='set-date'>
             <div>시작일 : {choiceFullList[0]}</div>
             <div>종료일 : {choiceFullList[1]}</div>
           </div>
-          <button className="next" onClick={() => moveUrl("add")}>
+          <button className='next' onClick={() => moveUrl("add")}>
             등록하기
           </button>
         </div>
-        <div className="friend">
+        <div className='friend'>
           <FriendList />
         </div>
       </div>

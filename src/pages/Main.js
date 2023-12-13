@@ -58,7 +58,7 @@ const getMainScheduleId = (allTasked, nowDate) => {
   return false;
 };
 
-const CalCell = ({ nowMonth, selectDate, choiceFullList, drag, allTasked, detailClick }) => {
+const CalCell = ({ nowMonth, isInsertIng, selectDate, overList, choiceFullList, drag, allTasked, detailClick }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -78,6 +78,14 @@ const CalCell = ({ nowMonth, selectDate, choiceFullList, drag, allTasked, detail
       const cloneDay = day;
       const startDay = new Date(choiceFullList[0]);
       const endDay = new Date(choiceFullList[1]);
+
+      let overStartDay = null;
+      let overEndDay = null;
+
+      if (overList.length > 0) {
+        overStartDay = new Date(overList[0]);
+        overEndDay = new Date(overList[overList.length - 1]);
+      }
 
       let fullEndDay = "";
       if (choiceFullList[1]) {
@@ -105,6 +113,20 @@ const CalCell = ({ nowMonth, selectDate, choiceFullList, drag, allTasked, detail
 
           <span className={format(nowMonth, "M") !== format(day, "M") ? "not-vaild daily" : "daily"}>{formattedDate}</span>
           <span className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""} onClick={() => detailClick(allTasked, cloneDay)}></span>
+
+          {overStartDay && overEndDay && (
+            <span
+              className={
+                (Number(format(overEndDay, "M")) >= Number(format(day, "M")) &&
+                  Number(format(overStartDay, "M")) === Number(format(day, "M")) &&
+                  Number(format(startDay, "d")) === Number(format(day, "d")) &&
+                  Number(format(startDay, "M")) === Number(format(day, "M"))) ||
+                (Number(format(overStartDay, "d")) <= Number(format(day, "d")) && Number(format(overEndDay, "d")) >= Number(format(day, "d")))
+                  ? "over"
+                  : ""
+              }
+            ></span>
+          )}
         </div>
       );
 
@@ -263,6 +285,8 @@ const Main = () => {
 
   const [selectDate, setSelectDate] = useState(new Date());
   const [choiceFullList, setChoiceFullList] = useState([]);
+  const [overList, setOverList] = useState([]);
+  const [isInsertIng, setIsInsertIng] = useState(true);
 
   const prevMonth = () => {
     setNowMonth(subMonths(nowMonth, 1));
@@ -289,6 +313,10 @@ const Main = () => {
     let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
 
     if (type === "start") {
+      // 오버 리스트 초기화
+      setOverList([]);
+
+      setIsInsertIng(false);
       if (choiceFullList.length === 0) {
         setChoiceFullList([...choiceFullList, fullDate]);
       } else {
@@ -299,10 +327,15 @@ const Main = () => {
     }
 
     if (type === "over") {
-      console.log("날짜over시");
+      if (isInsertIng) {
+        return;
+      }
+
+      setOverList([...overList, fullDate]);
     }
 
     if (type === "end") {
+      setIsInsertIng(true);
       if (choiceFullList.length === 0) {
         return;
       }
@@ -376,7 +409,16 @@ const Main = () => {
         <div className='calendar'>
           <CalHeader nowMonth={nowMonth} prevMonth={prevMonth} nextMonth={nextMonth} />
           <CalDays />
-          <CalCell nowMonth={nowMonth} selectDate={selectDate} choiceFullList={choiceFullList} allTasked={mainTask} drag={drag} detailClick={(allTask, date) => moveUrl("detail", allTask, date)} />
+          <CalCell
+            nowMonth={nowMonth}
+            isInsertIng={isInsertIng}
+            selectDate={selectDate}
+            overList={overList}
+            choiceFullList={choiceFullList}
+            allTasked={mainTask}
+            drag={drag}
+            detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
+          />
           <div className='set-date'>
             <div>시작일 : {choiceFullList[0]}</div>
             <div>종료일 : {choiceFullList[1]}</div>

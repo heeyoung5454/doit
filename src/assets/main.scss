@@ -85,10 +85,19 @@
 
         .check {
           display: inline-block;
-
           width: 100%;
           height: 15px;
           background-color: #525fe1;
+        }
+
+        .over {
+          position: absolute;
+          left: 0;
+          top: 25px;
+          display: inline-block;
+          width: 100%;
+          height: 15px;
+          background-color: red;
         }
         //
         //.not-vaild {

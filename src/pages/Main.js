@@ -58,7 +58,7 @@ const getMainScheduleId = (allTasked, nowDate) => {
   return false;
 };
 
-const CalCell = ({ nowMonth, selectDate, onDateClick, choiceFullList, drag, allTasked, detailClick }) => {
+const CalCell = ({ nowMonth, selectDate, choiceFullList, drag, allTasked, detailClick }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -76,29 +76,33 @@ const CalCell = ({ nowMonth, selectDate, onDateClick, choiceFullList, drag, allT
       formattedDate = format(day, "d");
       // day를 직접적으로 사용하면 무한루프 돌기 때문에 지역변수로 선언하여 사용
       const cloneDay = day;
-      const compareDay = new Date(choiceFullList[0]);
+      const startDay = new Date(choiceFullList[0]);
+      const endDay = new Date(choiceFullList[1]);
 
-      console.log(choiceFullList, formattedDate);
+      let fullEndDay = "";
+      if (choiceFullList[1]) {
+        fullEndDay = format(endDay, "Y") + "." + format(endDay, "M") + "." + format(endDay, "d");
+      }
 
       days.push(
         <div
           className={`cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectDate) ? "selected" : format(nowMonth, "M") !== format(day, "M") ? "not-valid" : "valid"}`}
           key={day}
-          // onClick={() => onDateClick(cloneDay)}
-          // onDoubleClick={() => onDouble(cloneDay)}
           onMouseDown={() => drag(cloneDay, "start")}
           onMouseUp={() => drag(cloneDay, "end")}
+          onMouseOver={() => drag(cloneDay, "over")}
         >
-          {compareDay.getDate() === formattedDate && isSameMonth(day, compareDay) && (
+          {startDay.getDate() === Number(formattedDate) && isSameMonth(day, startDay) && isSameMonth(day, endDay) && (
             <div className='box'>
               <div>
                 <input id='title' type='text' name='title' placeholder='새로운 이벤트' value={title} onChange={(e) => setTitle(e.target.value)} />
               </div>
               <div>
-                {format(day, "Y").toString()}.{format(day, "M").toString()}.{formattedDate}
+                {format(startDay, "Y")}.{format(startDay, "M")}.{format(startDay, "d")} ~{fullEndDay}
               </div>
             </div>
           )}
+
           <span className={format(nowMonth, "M") !== format(day, "M") ? "not-vaild daily" : "daily"}>{formattedDate}</span>
           <span className={getMainScheduleId(allTasked, day) > 0 ? "check" : ""} onClick={() => detailClick(allTasked, cloneDay)}></span>
         </div>
@@ -288,13 +292,20 @@ const Main = () => {
       if (choiceFullList.length === 0) {
         setChoiceFullList([...choiceFullList, fullDate]);
       } else {
-        setChoiceFullList([fullDate, choiceFullList[0]]);
+        setChoiceFullList([fullDate, null]);
       }
 
       return;
     }
 
+    if (type === "over") {
+      console.log("날짜over시");
+    }
+
     if (type === "end") {
+      if (choiceFullList.length === 0) {
+        return;
+      }
       // 한개 날짜가 지정되어있을 경우, 비교해서 넣기
       if (new Date(fullDate) > new Date(choiceFullList[0])) {
         setChoiceFullList([choiceFullList[0], fullDate]);
@@ -306,52 +317,14 @@ const Main = () => {
     }
   };
 
-  const onDateClick = (day) => {
-    let convertDay = new Date(day);
-
-    setSelectDate(day);
-
-    let month = convertDay.getMonth() + 1;
-    let date = convertDay.getDate();
-
-    if (month < 10) {
-      month = "0" + month;
-    }
-
-    if (date < 10) {
-      date = "0" + date;
-    }
-
-    let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
-
-    // 현재 있는 choiceFullList가 1개이하라면 그냥 푸시
-    if (choiceFullList.length <= 2) {
-      if (choiceFullList.length === 0) {
-        // 시작일과 종료일 모두 미셋팅 -> 무조건 푸시
-        setChoiceFullList([...choiceFullList, fullDate]);
-      } else if (choiceFullList.length === 1) {
-        // 한개 날짜가 지정되어있을 경우, 비교해서 넣기
-        if (new Date(fullDate) > new Date(choiceFullList[0])) {
-          setChoiceFullList([...choiceFullList, fullDate]);
-        } else {
-          setChoiceFullList([fullDate, ...choiceFullList]);
-        }
-      } else {
-        // 시작일과 종료일 셋팅 완료 됬을 경우 선택값 초기화 후 시작일로 무조건 셋팅
-        setChoiceFullList([]);
-        choiceFullList[0] = fullDate;
-      }
-    }
-  };
-
   const pageMove = useNavigate();
 
   const moveUrl = (type, allTask, date) => {
     console.log(choiceFullList[0], choiceFullList[1]);
 
-    if (true) {
-      return;
-    }
+    // if (true) {
+    //   return;
+    // }
 
     if (type === "add") {
       if (choiceFullList.length < 2 || choiceFullList == null) {
@@ -403,15 +376,7 @@ const Main = () => {
         <div className='calendar'>
           <CalHeader nowMonth={nowMonth} prevMonth={prevMonth} nextMonth={nextMonth} />
           <CalDays />
-          <CalCell
-            nowMonth={nowMonth}
-            selectDate={selectDate}
-            onDateClick={onDateClick}
-            choiceFullList={choiceFullList}
-            allTasked={mainTask}
-            drag={drag}
-            detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
-          />
+          <CalCell nowMonth={nowMonth} selectDate={selectDate} choiceFullList={choiceFullList} allTasked={mainTask} drag={drag} detailClick={(allTask, date) => moveUrl("detail", allTask, date)} />
           <div className='set-date'>
             <div>시작일 : {choiceFullList[0]}</div>
             <div>종료일 : {choiceFullList[1]}</div>

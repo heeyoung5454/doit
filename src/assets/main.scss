@@ -131,6 +131,20 @@
             left: -10px;
           }
 
+          &.detail {
+            background-color: red;
+          }
+
+          .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 15px;
+            height: 15px;
+            background: url(./images/icon/close.png) no-repeat center center;
+            background-size: 15px 15px;
+          }
+
           div {
             &:first-child {
               padding-bottom: 10px;

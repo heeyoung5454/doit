@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/header.scss";
-import { http, noTokenHttp } from "utile/http";
+import { http, logOutHttp } from "utile/http";
 import { useNavigate } from "react-router-dom";
 import Alarm from "../pages/component/alarm";
 
@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   const logOut = () => {
-    noTokenHttp
+    logOutHttp
       .post("/logout")
       .then((res) => {
         if (res.data.result === "suc") {
@@ -62,17 +62,17 @@ const Header = () => {
   };
 
   return (
-    <div className="header-bar" onClick={(e) => closeModal(e)}>
-      <div className="title">
+    <div className='header-bar' onClick={(e) => closeModal(e)}>
+      <div className='title'>
         <h2 onClick={() => movePage("/main")}>scheduler</h2>
       </div>
       <Alarm open={modalOpen} close={closeModal} pushList={alarmList} />
 
-      <div className="alarm-icon" onClick={(e) => openModal(e)}>
+      <div className='alarm-icon' onClick={(e) => openModal(e)}>
         {alarmList.length > 0 ? "(" + alarmList.length + ")" : ""}
       </div>
 
-      <div className="logout" onClick={() => logOut()}>
+      <div className='logout' onClick={() => logOut()}>
         로그아웃
       </div>
     </div>

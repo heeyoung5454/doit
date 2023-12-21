@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import {
-  format,
-  addMonths,
-  subMonths,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-} from "date-fns";
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { isSameMonth, isSameDay, addDays } from "date-fns";
 import "../assets/main.scss";
 import http from "utile/http";
@@ -21,20 +13,18 @@ import BlockList from "./friend/BlockList";
 
 const CalHeader = ({ nowMonth, prevMonth, nextMonth }) => {
   return (
-    <div className="header">
-      <div className="title">
-        <span className="month">
+    <div className='header'>
+      <div className='title'>
+        <span className='month'>
           {format(nowMonth, "M")}
-          <span className="eng">
-            {nowMonth.toLocaleString("en-US", { month: "long" })}
-          </span>
+          <span className='eng'>{nowMonth.toLocaleString("en-US", { month: "long" })}</span>
         </span>
 
-        <span className="year">{format(nowMonth, "yyyy")}</span>
+        <span className='year'>{format(nowMonth, "yyyy")}</span>
       </div>
-      <div className="arrow">
-        <Icon icon="bi:arrow-left-circle-fill" onClick={prevMonth} />
-        <Icon icon="bi:arrow-right-circle-fill" onClick={nextMonth} />
+      <div className='arrow'>
+        <Icon icon='bi:arrow-left-circle-fill' onClick={prevMonth} />
+        <Icon icon='bi:arrow-right-circle-fill' onClick={nextMonth} />
       </div>
     </div>
   );
@@ -46,26 +36,21 @@ const CalDays = () => {
 
   for (let i = 0; i < 7; i++) {
     days.push(
-      <div className="week" key={i}>
+      <div className='week' key={i}>
         {date[i]}
       </div>
     );
   }
 
-  return <div className="day row">{days}</div>;
+  return <div className='day row'>{days}</div>;
 };
 
 const getMainSchedule = (allTasked, nowDate, type) => {
   for (let i = 0; i < allTasked.length; i++) {
-    let stDate = new Date(
-      new Date(allTasked[i].startDate).setHours(0, 0, 0, 0)
-    );
+    let stDate = new Date(new Date(allTasked[i].startDate).setHours(0, 0, 0, 0));
     let endDate = new Date(new Date(allTasked[i].endDate).setHours(0, 0, 0, 0));
 
-    if (
-      nowDate.getTime() >= stDate.getTime() &&
-      nowDate.getTime() <= endDate.getTime()
-    ) {
+    if (nowDate.getTime() >= stDate.getTime() && nowDate.getTime() <= endDate.getTime()) {
       if (type === "id") {
         return allTasked[i].mainScheduleId;
       }
@@ -83,25 +68,11 @@ const getMainSchedule = (allTasked, nowDate, type) => {
   return false;
 };
 
-const CalCell = ({
-  nowMonth,
-  selectDate,
-  overList,
-  choiceFullList,
-  drag,
-  isBoxOpen,
-  setIsBoxOpen,
-  isDetailBoxOpen,
-  setIsDetailBoxOpen,
-  allTasked,
-  detailClick,
-}) => {
+const CalCell = ({ nowMonth, selectDate, overList, choiceFullList, drag, isBoxOpen, setIsBoxOpen, isDetailBoxOpen, setIsDetailBoxOpen, allTasked, detailClick, setTitle }) => {
   const monthStart = startOfMonth(nowMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
   const endDate = endOfWeek(monthEnd);
-
-  const [title, setTitle] = useState("새로운 이벤트"); // 스케줄 제목
 
   const rows = [];
   let days = [];
@@ -126,110 +97,74 @@ const CalCell = ({
 
       let fullEndDay = "";
       if (choiceFullList[1]) {
-        fullEndDay =
-          format(endDay, "Y") +
-          "." +
-          format(endDay, "M") +
-          "." +
-          format(endDay, "d");
+        fullEndDay = format(endDay, "Y") + "." + format(endDay, "M") + "." + format(endDay, "d");
       }
 
       days.push(
         <div
-          className={`cell ${
-            !isSameMonth(day, monthStart)
-              ? "disabled"
-              : isSameDay(day, selectDate)
-              ? "selected"
-              : format(nowMonth, "M") !== format(day, "M")
-              ? "not-valid"
-              : "valid"
-          }`}
+          className={`cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectDate) ? "selected" : format(nowMonth, "M") !== format(day, "M") ? "not-valid" : "valid"}`}
           key={day}
           onMouseDown={() => drag(cloneDay, "start")}
           onMouseUp={() => drag(cloneDay, "end")}
           onMouseOver={() => drag(cloneDay, "over")}
         >
           {/* 이미 등록된 스케줄 정보 오픈 */}
-          {isDetailBoxOpen &&
-            isSameMonth(day, startDay) &&
-            isSameDay(day, startDay) && (
-              <div className="box detail">
-                <span
-                  className="close"
-                  onClick={() => setIsDetailBoxOpen(false)}
-                ></span>
-                <div>
-                  <input
-                    id="title"
-                    type="text"
-                    name="title"
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                  />
-                </div>
-                <div>
-                  {getMainSchedule(allTasked, day, "startDt")} ~
-                  {getMainSchedule(allTasked, day, "endDt")}
-                </div>
+          {isDetailBoxOpen && isSameMonth(day, startDay) && isSameDay(day, startDay) && (
+            <div className='box detail'>
+              <span className='close' onClick={() => setIsDetailBoxOpen(false)}></span>
+              <div>
+                <input
+                  id='title'
+                  type='text'
+                  name='title'
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                />
               </div>
-            )}
+              <div>
+                {getMainSchedule(allTasked, day, "startDt")} ~{getMainSchedule(allTasked, day, "endDt")}
+              </div>
+            </div>
+          )}
           {/* 스케줄 등록 정보 박스 오픈 */}
-          {isBoxOpen &&
-            startDay.getDate() === Number(formattedDate) &&
-            isSameMonth(day, startDay) &&
-            isSameMonth(day, endDay) && (
-              <div className="box">
-                <span
-                  className="close"
-                  onClick={() => setIsBoxOpen(false)}
-                ></span>
-                <div>
-                  <input
-                    id="title"
-                    type="text"
-                    name="title"
-                    placeholder="새로운 이벤트"
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                  />
-                </div>
-                <div>
-                  {format(startDay, "Y")}.{format(startDay, "M")}.
-                  {format(startDay, "d")} ~{fullEndDay}
-                </div>
+          {isBoxOpen && startDay.getDate() === Number(formattedDate) && isSameMonth(day, startDay) && isSameMonth(day, endDay) && (
+            <div className='box'>
+              <span className='close' onClick={() => setIsBoxOpen(false)}></span>
+              <div>
+                <input
+                  id='title'
+                  type='text'
+                  name='title'
+                  placeholder='새로운 이벤트'
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                />
               </div>
-            )}
-          <span
-            className={
-              format(nowMonth, "M") !== format(day, "M")
-                ? "not-vaild daily"
-                : "daily"
-            }
-          >
+              <div>
+                {format(startDay, "Y")}.{format(startDay, "M")}.{format(startDay, "d")} ~{fullEndDay}
+              </div>
+            </div>
+          )}
+          <span className={format(nowMonth, "M") !== format(day, "M") ? "not-vaild daily" : "daily"}>
             {formattedDate}
             {/* // {isBoxOpen.toString()} */}
           </span>
           <span
             className={getMainSchedule(allTasked, day, "id") > 0 ? "check" : ""}
-            onClick={() => detailClick(allTasked, cloneDay)}
+            onClick={() => detailClick(allTasked, cloneDay, "boxOpen")}
+            onDoubleClick={() => detailClick(allTasked, cloneDay, "pageMove")}
           ></span>
           {/* 마우스 오버시 효과 - 범위 지정 */}
           {overStartDay && overEndDay && (
             <span
               className={
                 (Number(format(overEndDay, "M")) >= Number(format(day, "M")) &&
-                  Number(format(overStartDay, "M")) ===
-                    Number(format(day, "M")) &&
+                  Number(format(overStartDay, "M")) === Number(format(day, "M")) &&
                   Number(format(startDay, "d")) === Number(format(day, "d")) &&
                   Number(format(startDay, "M")) === Number(format(day, "M"))) ||
-                (Number(format(overStartDay, "d")) <=
-                  Number(format(day, "d")) &&
-                  Number(format(overEndDay, "d")) >= Number(format(day, "d")))
+                (Number(format(overStartDay, "d")) <= Number(format(day, "d")) && Number(format(overEndDay, "d")) >= Number(format(day, "d")))
                   ? "over"
                   : ""
               }
@@ -242,14 +177,14 @@ const CalCell = ({
     }
 
     rows.push(
-      <div className="row" key={day}>
+      <div className='row' key={day}>
         {days}
       </div>
     );
     days = [];
   }
 
-  return <div className="body">{rows}</div>;
+  return <div className='body'>{rows}</div>;
 };
 
 // 친구 목록
@@ -318,12 +253,9 @@ const FriendList = () => {
 
   for (let i = 0; i < followingList.length; i++) {
     getFollowingList.push(
-      <div className="friend-item" key={i}>
+      <div className='friend-item' key={i}>
         <span>{followingList[i].nickname}</span>
-        <button
-          className="cancel"
-          onClick={() => followCancel(followingList[i].friendId)}
-        >
+        <button className='cancel' onClick={() => followCancel(followingList[i].friendId)}>
           팔로잉 취소
         </button>
       </div>
@@ -332,26 +264,26 @@ const FriendList = () => {
 
   for (let j = 0; j < followBackList.length; j++) {
     getFollowBackList.push(
-      <div className="friend-item" key={j}>
+      <div className='friend-item' key={j}>
         <span>{followBackList[j].nickname}</span>
       </div>
     );
   }
 
   return (
-    <div className="friend-list">
+    <div className='friend-list'>
       <div>
         <h2>친구 목록</h2>
-        <button className="block-btn" onClick={() => openBlockList()}>
+        <button className='block-btn' onClick={() => openBlockList()}>
           차단 목록
         </button>
 
-        <div className="follow-back">
+        <div className='follow-back'>
           <h3>맞팔친구</h3>
           <div>{getFollowBackList}</div>
         </div>
 
-        <div className="follow-ing">
+        <div className='follow-ing'>
           <h3>팔로잉친구</h3>
           <div>{getFollowingList}</div>
         </div>
@@ -360,7 +292,7 @@ const FriendList = () => {
       <BlockList open={isBlockOpen} close={closeBlockList} />
       <SearchPop open={modalOpen} close={closeModal} />
 
-      <button className="search" onClick={() => openModal()}>
+      <button className='search' onClick={() => openModal()}>
         친구 찾기
       </button>
     </div>
@@ -399,8 +331,11 @@ const Main = () => {
   const [overList, setOverList] = useState([]);
   const [isInsertIng, setIsInsertIng] = useState(true);
 
+  const [title, setTitle] = useState("새로운 이벤트"); // 스케줄 제목
+
   const prevMonth = () => {
     setNowMonth(subMonths(nowMonth, 1));
+    setSelectDate(new Date());
   };
 
   const nextMonth = () => {
@@ -428,8 +363,7 @@ const Main = () => {
       date = "0" + date;
     }
 
-    let fullDate =
-      convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
+    let fullDate = convertDay.getFullYear() + "-" + month.toString() + "-" + date.toString();
 
     if (type === "start") {
       // 오버 리스트 초기화
@@ -493,8 +427,9 @@ const Main = () => {
 
   const pageMove = useNavigate();
 
-  const moveUrl = (type, allTask, date) => {
+  const moveUrl = (type, allTask, date, detailType) => {
     console.log(choiceFullList[0], choiceFullList[1]);
+    console.log(title);
 
     // if (true) {
     //   return;
@@ -507,6 +442,7 @@ const Main = () => {
       }
 
       let insertParams = {
+        title: title,
         startDate: choiceFullList[0],
         endDate: choiceFullList[1],
       };
@@ -519,13 +455,6 @@ const Main = () => {
 
             // 페이지 새로고침
             window.location.reload();
-
-            // pageMove("/detail", {
-            //   state: {
-            //     mainScheduleId: res.data.data,
-            //     insertDate: choiceFullList,
-            //   },
-            // });
           } else if (res.data.result === "err") {
             alert("스케줄 등록에 실패하셨습니다.");
             return;
@@ -539,30 +468,24 @@ const Main = () => {
       setIsBoxOpen(false);
       setIsDetailBoxOpen(true);
 
-      if (true) {
-        return;
+      if (detailType === "pageMove") {
+        let mainId = getMainSchedule(allTask, date, "id");
+
+        pageMove("/detail", {
+          state: {
+            mainScheduleId: mainId,
+          },
+        });
       }
-
-      let mainId = getMainSchedule(allTask, date, "id");
-
-      pageMove("/detail", {
-        state: {
-          mainScheduleId: mainId,
-        },
-      });
     }
   };
 
   return (
     <div>
       <Header />
-      <div className="main">
-        <div className="calendar">
-          <CalHeader
-            nowMonth={nowMonth}
-            prevMonth={prevMonth}
-            nextMonth={nextMonth}
-          />
+      <div className='main'>
+        <div className='calendar'>
+          <CalHeader nowMonth={nowMonth} prevMonth={prevMonth} nextMonth={nextMonth} />
           <CalDays />
           <CalCell
             nowMonth={nowMonth}
@@ -576,18 +499,19 @@ const Main = () => {
             isDetailBoxOpen={isDetailBoxOpen}
             setIsDetailBoxOpen={setIsDetailBoxOpen}
             isBoxOpen={isBoxOpen}
-            detailClick={(allTask, date) => moveUrl("detail", allTask, date)}
+            detailClick={(allTask, date, type) => moveUrl("detail", allTask, date, type)}
+            setTitle={setTitle}
           />
-          <div className="set-date">
+          <div className='set-date'>
             {JSON.stringify(overList)}
             <div>시작일 : {choiceFullList[0]}</div>
             <div>종료일 : {choiceFullList[1]}</div>
           </div>
-          <button className="next" onClick={() => moveUrl("add")}>
+          <button className='next' onClick={(title) => moveUrl("add", title)}>
             등록하기
           </button>
         </div>
-        <div className="friend">
+        <div className='friend'>
           <FriendList />
         </div>
       </div>

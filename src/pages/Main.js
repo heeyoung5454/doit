@@ -77,6 +77,10 @@ const getMainSchedule = (allTasked, nowDate, type) => {
       if (type === "endDt") {
         return allTasked[i].endDate;
       }
+
+      if (type === "open") {
+        return allTasked[i].open;
+      }
     }
   }
 
@@ -170,14 +174,34 @@ const CalCell = ({
                     }}
                   />
 
-                  <span onClick={() => detailClick(allTasked, cloneDay, true)}>
-                    이동
-                  </span>
+                  <label htmlFor="open">
+                    공개 {getMainSchedule(allTasked, cloneDay, "open")}
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="open"
+                    value={getMainSchedule(allTasked, cloneDay, "open")}
+                    defaultChecked={getMainSchedule(
+                      allTasked,
+                      cloneDay,
+                      "open"
+                    )}
+                    onClick={(e) =>
+                      updateOpen(e.target.checked, allTasked, cloneDay)
+                    }
+                  />
                 </div>
                 <div>
                   {getMainSchedule(allTasked, cloneDay, "startDt")} ~
                   {getMainSchedule(allTasked, cloneDay, "endDt")}
                 </div>
+
+                <span
+                  className="move"
+                  onClick={() => detailClick(allTasked, cloneDay, true)}
+                >
+                  이동
+                </span>
 
                 <button
                   className="delete"
@@ -315,6 +339,21 @@ const delMainSchedule = (id) => {
         window.location.replace("/main");
       } else if (res.data.result === "err") {
         alert("스케줄 삭제에 실패하였습니다");
+      }
+      return;
+    })
+    .catch((err) => console.log("catch :: " + err));
+};
+
+// 메인 스케줄 공개 여부 수정
+const updateOpen = (isChecked, allTasked, cloneDay) => {
+  let mainId = getMainSchedule(allTasked, cloneDay, "id");
+
+  http
+    .patch(`/main-schedule/${mainId}/${isChecked}`)
+    .then((res) => {
+      if (res.data.result === "err") {
+        alert("공개 설정 변경에 실패하였습니다");
       }
       return;
     })

@@ -155,9 +155,12 @@
 
             .top {
               display: flex;
-              justify-content: space-between;
+              justify-content: start;
               input {
                 color: #222;
+                &[type="checkbox"] {
+                  color: red;
+                }
               }
             }
 
@@ -179,17 +182,12 @@
             background-size: 15px 15px;
           }
 
-          div {
-            &:first-child {
-              padding-bottom: 10px;
-            }
-            input {
-              font-size: 15px;
-              color: #fff;
-              background-color: transparent;
-              border: none;
-              border-bottom: 0.1rem solid #fff;
-            }
+          input {
+            font-size: 15px;
+            color: #fff;
+            background-color: transparent;
+            border: none;
+            border-bottom: 0.1rem solid #fff;
           }
         }
 

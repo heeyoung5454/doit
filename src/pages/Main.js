@@ -78,6 +78,10 @@ const getMainSchedule = (allTasked, nowDate, type) => {
         return allTasked[i].endDate;
       }
 
+      if (type === "title") {
+        return allTasked[i].title;
+      }
+
       if (type === "open") {
         return allTasked[i].open;
       }
@@ -99,6 +103,7 @@ const CalCell = ({
   setIsDetailBoxOpen,
   allTasked,
   detailClick,
+  updateTitle,
 }) => {
   const [title, setTitle] = useState("새로운 이벤트"); // 스케줄 제목
 
@@ -169,8 +174,13 @@ const CalCell = ({
                     id="title"
                     type="text"
                     name="title"
-                    onChange={(e) => {
+                    defaultValue={getMainSchedule(allTasked, cloneDay, "title")}
+                    onBlur={(e) => {
                       setTitle(e.target.value);
+                      updateTitle(
+                        getMainSchedule(allTasked, cloneDay, "id"),
+                        e.target.value
+                      );
                     }}
                   />
 
@@ -345,6 +355,20 @@ const delMainSchedule = (id) => {
     .catch((err) => console.log("catch :: " + err));
 };
 
+// 메인 스케줄 타이틀 수정
+const updateMainTitle = (mainId, title) => {
+  console.log(title);
+  http
+    .patch(`/main-schedule/${mainId}?title=${title}`)
+    .then((res) => {
+      if (res.result === "err") {
+        alert("타이틀 수정 실패하였습니다");
+      }
+      return;
+    })
+    .catch((err) => console.log("catch :: " + err));
+};
+
 // 메인 스케줄 공개 여부 수정
 const updateOpen = (isChecked, allTasked, cloneDay) => {
   let mainId = getMainSchedule(allTasked, cloneDay, "id");
@@ -495,6 +519,7 @@ const Main = () => {
       .then((res) => {
         if (res.data.result === "suc") {
           getMainTask(res.data.data.mainScheduleList);
+          console.log(res.data);
         } else if (res.data.result === "err") {
           alert("스케줄 조회에 실패하셨습니다.");
         }
@@ -650,6 +675,7 @@ const Main = () => {
             detailClick={(allTask, date, isMove) =>
               moveUrl(allTask, date, isMove)
             }
+            updateTitle={(mainId, title) => updateMainTitle(mainId, title)}
           />
           <div className="set-date">
             {JSON.stringify(overList)}

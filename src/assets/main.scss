@@ -155,7 +155,7 @@
 
             .top {
               display: flex;
-              justify-content: start;
+              justify-content: flex-start;
               input {
                 color: #222;
                 &[type="checkbox"] {

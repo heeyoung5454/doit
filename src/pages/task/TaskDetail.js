@@ -7,6 +7,9 @@ import Header from "../../layout/header";
 const TaskDetail = () => {
   const [detailTask, setDetailTask] = useState([]);
   const [detailDate, setDetailDate] = useState([]);
+
+  const [changePercent, setChangePercent] = useState(0);
+
   const location = useLocation();
   const pageMove = useNavigate();
 
@@ -77,7 +80,8 @@ const TaskDetail = () => {
             </div>
           );
           for (let k = 0; k < detailTask[j].taskSchedules.length; k++) {
-            let changePercent = 0; // 변경할 진행률
+            let percent = detailTask[j].taskSchedules[k].percent; // 변경할 진행률
+
             detailTaskList.push(
               <div
                 key={
@@ -97,7 +101,7 @@ const TaskDetail = () => {
                     placeholder="진행률"
                     defaultValue={detailTask[j].taskSchedules[k].percent}
                     onChange={(e) => {
-                      changePercent = e.target.value;
+                      percent = e.target.value;
                     }}
                   />
 
@@ -106,13 +110,30 @@ const TaskDetail = () => {
                     onClick={() =>
                       updatePercent(
                         detailTask[j].taskSchedules[k].taskScheduleId,
-                        changePercent
+                        percent
                       )
                     }
                   >
                     진행률 변경
                   </button>
                 </div>
+                <div
+                  className="percent-bar"
+                  onMouseUp={(e) => {
+                    percent = Math.floor(
+                      ((e.clientX - 50) / e.target.offsetWidth) * 100
+                    );
+                    setChangePercent(percent);
+
+                    updatePercent(
+                      detailTask[j].taskSchedules[k].taskScheduleId,
+                      percent
+                    );
+                  }}
+                >
+                  <div className="now" style={{ width: percent + "%" }}></div>
+                </div>
+                {percent}//{changePercent}
                 <div className="percent">
                   {detailTask[j].taskSchedules[k].complete === "N"
                     ? detailTask[j].taskSchedules[k].percent +

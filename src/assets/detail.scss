@@ -35,6 +35,7 @@
         div {
           margin-right: 20px;
         }
+
         button {
           width: 80px;
           //완료
@@ -45,6 +46,27 @@
             height: 46px;
             background-color: #19a7ce;
           }
+        }
+      }
+
+      .percent-bar {
+        position: relative;
+        margin: 3px 0;
+        width: 100%;
+        height: 10px;
+
+        border-radius: 5px;
+        background-color: #ccc;
+
+        .now {
+          position: absolute;
+          cursor: pointer;
+          top: calc(50% - 5px);
+          left: 0;
+          border-radius: 5px;
+          width: 0px;
+          height: 10px;
+          background-color: red;
         }
       }
 

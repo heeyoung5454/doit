@@ -40,15 +40,18 @@ const TaskDetail = () => {
 
   const printDetail = () => {
     let detailTaskList = [];
-    console.log("detailContent", detailTask);
-    console.log("detailDate", detailDate);
+
     // Task가 하나도 없을 경우
     if (detailTask.length === 0) {
       for (let i = 0; i < detailDate.length; i++) {
         detailTaskList.push(
-          <div key={detailDate[i]} className='task-schedule-list'>
+          <div key={detailDate[i]} className="task-schedule-list">
             <div>{detailDate[i]}</div>
-            <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i])}>
+            <button
+              key={detailDate[i] + "insert"}
+              className="insert"
+              onClick={() => moveAddPage(detailDate[i])}
+            >
               등록
             </button>
           </div>
@@ -62,23 +65,60 @@ const TaskDetail = () => {
         // 일정이 이미 등록된 경우
         if (detailDate[i] === detailTask[j].date) {
           detailTaskList.push(
-            <div className='detail-title'>
+            <div className="detail-title">
               <div>{detailDate[i]}</div>
-              <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i], detailTask[j])}>
+              <button
+                key={detailDate[i] + "insert"}
+                className="insert"
+                onClick={() => moveAddPage(detailDate[i], detailTask[j])}
+              >
                 수정
               </button>
             </div>
           );
           for (let k = 0; k < detailTask[j].taskSchedules.length; k++) {
+            let changePercent = 0; // 변경할 진행률
             detailTaskList.push(
-              <div key={detailTask[j].dailyScheduleId + "-" + detailTask[j].taskSchedules[k].taskScheduleId} className='task-schedule-list'>
-                <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
-                <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
-                <div>완료여부 : {detailTask[j].taskSchedules[k].complete}</div>
-                <div>진행도 :{detailTask[j].taskSchedules[k].percent}</div>
-                <button className='complete' onClick={() => completeTask(detailTask[j].taskSchedules[k].taskScheduleId, detailTask[j].taskSchedules[k].complete)}>
-                  {detailTask[j].taskSchedules[k].complete === "N" ? "진행중" : "완료"}
-                </button>
+              <div
+                key={
+                  detailTask[j].dailyScheduleId +
+                  "-" +
+                  detailTask[j].taskSchedules[k].taskScheduleId
+                }
+                className="task-schedule-list"
+              >
+                <div className="summary">
+                  <div>제목 : {detailTask[j].taskSchedules[k].title}</div>
+                  <div>내용 : {detailTask[j].taskSchedules[k].content}</div>
+
+                  <input
+                    type="Number"
+                    name="percent"
+                    placeholder="진행률"
+                    defaultValue={detailTask[j].taskSchedules[k].percent}
+                    onChange={(e) => {
+                      changePercent = e.target.value;
+                    }}
+                  />
+
+                  <button
+                    className="complete"
+                    onClick={() =>
+                      updatePercent(
+                        detailTask[j].taskSchedules[k].taskScheduleId,
+                        changePercent
+                      )
+                    }
+                  >
+                    진행률 변경
+                  </button>
+                </div>
+                <div className="percent">
+                  {detailTask[j].taskSchedules[k].complete === "N"
+                    ? detailTask[j].taskSchedules[k].percent +
+                      "% 진행 중 입니다."
+                    : "완료되었습니다."}
+                </div>
               </div>
             );
           }
@@ -87,13 +127,18 @@ const TaskDetail = () => {
         else {
           detailTaskList.push(
             <div key={detailDate[i] + "-" + j}>
-              <div>{detailDate[i]}</div>
-
-              <div className='task-schedule-list'>
-                <div>등록된 일정이 없습니다</div>
-                <button key={detailDate[i] + "insert"} className='insert' onClick={() => moveAddPage(detailDate[i])}>
-                  등록
-                </button>
+              <div className="task-schedule-list">
+                <div>{detailDate[i]}</div>
+                <div className="summary">
+                  <div>등록된 일정이 없습니다</div>
+                  <button
+                    key={detailDate[i] + "insert"}
+                    className="insert"
+                    onClick={() => moveAddPage(detailDate[i])}
+                  >
+                    등록
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -111,19 +156,10 @@ const TaskDetail = () => {
       });
     };
 
-    // 할일 완료
-    const completeTask = (taskId, _complete) => {
-      // 현재 상태값과 반대의 상태값으로 파라미터값 세팅
-      let complete = "";
-
-      if (_complete === "N") {
-        complete = "Y";
-      } else if (_complete === "Y") {
-        complete = "N";
-      }
-
+    // 할일 진행도 변경
+    const updatePercent = (taskId, percent) => {
       http
-        .patch(`task-schedule/${taskId}/${complete}`)
+        .patch(`task-schedule/${taskId}/${percent}`)
         .then((res) => {
           if (res.data.result === "suc") {
             alert("성공");
@@ -138,7 +174,7 @@ const TaskDetail = () => {
     return (
       <div>
         <h2> 일별 상세화면</h2>
-        <div className='content'>{detailTaskList}</div>
+        <div className="content">{detailTaskList}</div>
       </div>
     );
   };
@@ -146,7 +182,7 @@ const TaskDetail = () => {
   return (
     <div>
       <Header />
-      <div className='task-detail'>{printDetail()}</div>
+      <div className="task-detail">{printDetail()}</div>
     </div>
   );
 };
